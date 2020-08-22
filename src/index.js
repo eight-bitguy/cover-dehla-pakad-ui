@@ -1,23 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import history from './history';
-import { createStore, combineReducers } from 'redux';
+import history from './JS/history';
 import Provider from 'react-redux/es/components/Provider';
-import './Styles/index.css';
-import * as reducers from './Redux';
-import {connectRouter} from "connected-react-router";
-import Router from "./router";
+import './index.css';
+import {ConnectedRouter} from "connected-react-router";
+import Router from "./JS/router";
 import {addInterceptor} from "./Api/api";
+import reduxStore from "./JS/store";
+import Url from "./JS/url";
 
-const appReducer = combineReducers({ ...reducers, router: connectRouter(history) });
-function rootReducer(state, action) {
-    return appReducer(state, action);
-}
-
-export const store = createStore(rootReducer,
-    {},
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+export const store = reduxStore;
+window.logout = () => {
+    window.setToken('');
+};
 
 window.getToken = () => {
     return localStorage.getItem('token');
@@ -27,27 +22,14 @@ window.setToken = (token) => {
     localStorage.setItem('token', token);
 };
 
-window.logout = () => {
-    window.setToken('');
-    window.setRoomCode('');
-};
-
-window.setRoomCode = (roomCode) => {
-    localStorage.setItem('currentRoomCode', roomCode);
-};
-
-window.getRoomCode = () => {
-    return localStorage.getItem('currentRoomCode');
-};
-
 window.apiUrl = () => `http://${window.location.hostname}:8000`;
 
-
 addInterceptor();
-
 ReactDOM.render(
     <Provider store={store}>
-        <Router />
+        <ConnectedRouter history={history}>
+            <Router />
+        </ConnectedRouter>
     </Provider>,
   document.getElementById('root')
 );

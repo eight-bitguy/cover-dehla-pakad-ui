@@ -1,15 +1,7 @@
 import update from 'immutability-helper';
 
-const UPDATE_CURRENT_ROOM_CODE = 'UPDATE_CURRENT_ROOM_CODE';
 const UPDATE_LOGGED_IN_USER_ID = 'UPDATE_LOGGED_IN_USER_ID';
 const UPDATE_NEXT_CHANCE = 'UPDATE_NEXT_CHANCE';
-
-export function updateCurrentRoom(roomCode) {
-    return {
-        type: UPDATE_CURRENT_ROOM_CODE,
-        data: roomCode
-    };
-}
 
 export function updateLoggedInUserId(userId) {
     return {
@@ -26,16 +18,12 @@ export function updateNextChance(nextChance) {
 }
 
 const initialState = {
-    currentRoomCode: null,
     loggedInUserId: null,
     nextChance: null,
 };
 
 export default function additionalInfo(state = initialState, action) {
     switch (action.type) {
-        case UPDATE_CURRENT_ROOM_CODE:
-            return update(state, {currentRoomCode: {$set: action.data}});
-
         case UPDATE_LOGGED_IN_USER_ID:
             return update(state, {loggedInUserId: {$set: action.data}});
 

@@ -1,46 +1,16 @@
-import React, {PureComponent} from 'react';
-import Page from "../Pages/page";
+import React from 'react';
+import Loader from "./loader";
 
-export default class MyButton extends PureComponent
-{
-    static TYPE_BIG_ROUND_BUTTON = 'TYPE_BIG_ROUND_BUTTON';
-    static TYPE_SMALL_ROUND_BUTTON = 'TYPE_SMALL_ROUND_BUTTON';
+const MyButton = (props) => {
+    const className = `my-button ${props.className ?? ''} ${props.disabled ? '-disabled' : ''}`;
+    return (
+        <button
+            onClick={props.onClick}
+            disabled={props.disabled}
+            className={className}>
+            <div className='button-loader-container'>{props.loading ? <Loader /> : props.label}</div>
+        </button>
+    );
+};
 
-    bigRoundButton = () => {
-        const {
-            label, onClick, className
-        } = this.props;
-
-        return (
-            <button onClick={onClick} className={`big-round-button ${className || ''}`}>
-                {label}
-            </button>
-        );
-    };
-
-    smallRoundButton = () => {
-        const {
-            label, onClick, className
-        } = this.props;
-
-        return (
-            <button onClick={onClick} className={`small-round-button ${className || ''}`}>
-                {label}
-            </button>
-        );
-    };
-
-
-    render() {
-        const { type } = this.props;
-
-        switch (type) {
-            case MyButton.TYPE_BIG_ROUND_BUTTON:
-                return this.bigRoundButton();
-            case MyButton.TYPE_SMALL_ROUND_BUTTON:
-                return this.smallRoundButton();
-            default:
-                return this.bigRoundButton();
-        }
-    }
-}
+export default MyButton;

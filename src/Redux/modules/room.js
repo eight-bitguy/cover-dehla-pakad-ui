@@ -1,4 +1,4 @@
-import {mergeBasedOnAttribute} from "../../helper";
+import update from 'immutability-helper';
 
 const ADD_ROOM = 'ADD_ROOM';
 
@@ -9,12 +9,12 @@ export function addRoom(data) {
     };
 }
 
-const initialState = [] ;
+const initialState = {} ;
 
-export default function rooms(state = initialState, action) {
+export default function room(state = initialState, action) {
     switch (action.type) {
         case ADD_ROOM:
-            return mergeBasedOnAttribute(state, [action.data], 'code');
+            return action.data;
 
         default:
             return state;

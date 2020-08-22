@@ -8,7 +8,7 @@ export function PrivateRoute({ component: Component, ...rest }) {
         <Route
             {...rest}
             render={routeProps => (
-                isLoggedIn()
+                true
                     ? <Component {...routeProps} />
                     : <Redirect to={{pathname: Url.Login, state: { from: routeProps.location }}} />
         )}/>

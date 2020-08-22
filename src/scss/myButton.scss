@@ -1,0 +1,35 @@
+@import "variables";
+
+.my-button {
+  background: inherit;
+  border-radius: 25px;
+  border: 1px solid $primary-color;
+  outline: none !important;
+  height: 50px;
+  width: 50%;
+  font-size: 18px;
+  font-family: $primary-font;
+  font-weight: bold;
+  color: $primary-color !important;
+}
+
+.my-button:active {
+  background: $primary-color;
+  color: inherit !important;
+}
+
+.button-loader-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.-disabled {
+  border: 1px solid $light-primary-color;
+  color: $light-primary-color !important;
+
+  .my-button:active {
+    background: inherit;
+    color: $light-primary-color !important;
+  }
+}

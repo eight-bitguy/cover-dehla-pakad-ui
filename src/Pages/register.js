@@ -1,73 +1,57 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { push } from 'connected-react-router'
 import connect from 'react-redux/es/connect/connect';
-import Page from "./page";
 import MyInput from "../Components/myInput";
 import MyButton from "../Components/myButton";
-import {register} from "../Api/user";
-import {addUser} from "../Redux/modules/users";
-import Url from "../url";
+import {registerUser} from "../Api/user";
+import Url from "../JS/url";
+import User from "../Models/user";
 
-class Register extends Page {
-    constructor(props) {
-        super(props);
-        this.state={
-            name: '',
-            email: '',
-            password: ''
-        };
-    }
+const Register = (props) => {
+    const [user, _setUser] = useState(new User());
 
-    onChangeText = (e) => {
-        this.setState({[e.target.name]: e.target.value});
+    const setUser = (e) => {
+        user.set(e.target.name, e.target.value);
+        _setUser(user);
     };
 
-    register = async () => {
-        const {name, email, password} = this.state;
-        const isValid = name && email && password;
-
-        if (!isValid) {
+    const onRegisterClick = async () => {
+        if (!user.isValidForRegistration()) {
             return;
         }
-        const { data: userProfile } = await register(this.state);
-        this.props.dispatch(addUser([userProfile]));
-        this.props.history.push(Url.LandingPage);
+
+        await registerUser(user.attributes);
+        props.dispatch(push(Url.Login))
     };
 
-    render() {
-        return (
-            <div className="row mt-5">
-                <div className="col-10 offset-1 col-md-4 offset-md-4">
-                    <MyInput
-                        type='text'
-                        name='name'
-                        className='mt-3'
-                        placeholder='Name'
-                        onChangeText={this.onChangeText}
-                    />
-                    <MyInput
-                        type='text'
-                        name='email'
-                        className='mt-3'
-                        placeholder='Email'
-                        onChangeText={this.onChangeText}
-                    />
-                    <MyInput
-                        type='password'
-                        name='password'
-                        className='mt-3'
-                        placeholder='Password'
-                        onChangeText={this.onChangeText}
-                    />
-                    <MyButton
-                        type={MyButton.TYPE_BIG_ROUND_BUTTON}
-                        onClick={this.register}
-                        label='Register'
-                        className='mt-5'
-                    />
-                </div>
+    return (
+        <div className="register-container">
+            <div className="register">
+                <MyInput
+                    type='text'
+                    name='name'
+                    placeholder='Name'
+                    onChangeText={setUser}
+                />
+                <MyInput
+                    type='text'
+                    name='email'
+                    placeholder='Email'
+                    onChangeText={setUser}
+                />
+                <MyInput
+                    type='password'
+                    name='password'
+                    placeholder='Password'
+                    onChangeText={setUser}
+                />
+                <MyButton
+                    onClick={onRegisterClick}
+                    label='Register'
+                />
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default connect()(Register);

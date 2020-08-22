@@ -1,86 +1,62 @@
-import React from 'react';
-import Page from './page';
+import React, {useState} from 'react';
+import { replace } from 'connected-react-router'
 import MyInput from "../Components/myInput";
 import MyButton from "../Components/myButton";
 import Ruler from "../Components/ruler";
-import {createRoom} from "../Api/room";
 import connect from 'react-redux/es/connect/connect';
-import {addRoom} from "../Redux/modules/rooms";
-import Url from "../url";
-import {joinRoomWithRoomCode} from "../helper";
-import AppEventEmitter, {AppEvent} from "../events";
+import Url from './../JS/url';
+import Room from "../Models/room";
 
-class LandingPage extends Page {
+const LandingPage = (props) => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            joiningRoomCode: '140890'
-        };
-    }
+    const [room, _setRoom] = useState(new Room());
 
-    joinAndMoveToJoiningPage = async (roomCode) => {
-        await joinRoomWithRoomCode(roomCode);
-        await AppEventEmitter.emit(AppEvent.addPrivateChannel, roomCode);
-        this.props.history.push(Url.JoiningGame(roomCode));
+    const setRoom = (e) => {
+        room.set(e.target.name, e.target.value);
+        _setRoom(room);
     };
 
-    createRoom = async () => {
-        const { data : newRoom } = await createRoom();
-        this.props.dispatch(addRoom(newRoom));
-        this.joinAndMoveToJoiningPage(newRoom['code']);
+    const createNewRoom = async () => {
+        await room.createNewRoom();
+        props.dispatch(replace(Url.JoiningGame(room.get('code'))));
     };
 
-    joinRoom = async () => {
-        const { joiningRoomCode } = this.state;
-
-        if (joiningRoomCode) {
-            this.joinAndMoveToJoiningPage(joiningRoomCode);
+    const joinRoom = async () => {
+        const canJoin = await room.joinRoom();
+        if (canJoin) {
+            props.dispatch(replace(Url.JoiningGame(room.get('code'))));
         }
     };
 
-    renderJoinRoom = () => {
-        return (
-            <div className='row'>
-                <div className='col-md-2 offset-md-4 col-5 offset-1 mt-5'>
-                    <MyInput
-                        className='join-room'
-                        name='joiningRoomCode'
-                        type='text'
-                        onChangeText={this.onChangeText}/>
+    return(
+        <div className='landing-page-container'>
+            <div className='landing'>
+                <div className='join-room'>
+                    <div className='input'>
+                        <MyInput
+                            className='join-room'
+                            name='code'
+                            type='number'
+                            onChangeText={setRoom}
+                        />
+                    </div>
+                    <div className='button'>
+                        <MyButton
+                            label='Join Room'
+                            onClick={joinRoom}
+                        />
+                    </div>
                 </div>
-                <div className='col-md-2 col-5 mt-5'>
-                    <MyButton
-                        type={MyButton.TYPE_BIG_ROUND_BUTTON}
-                        label='Join Room'
-                        onClick={this.joinRoom} />
-                </div>
-            </div>
-        );
-    };
-
-    renderCreateRoom = () => {
-        return (
-            <div className='row'>
-                <div className='col-md-2 offset-md-5 col-8 offset-2'>
-                    <MyButton
-                        type={MyButton.TYPE_BIG_ROUND_BUTTON}
-                        label='Create a new Room'
-                        onClick={this.createRoom}/>
-                </div>
-            </div>
-        );
-    };
-
-    render() {
-        return(
-            <>
-                {this.renderJoinRoom()}
                 <Ruler />
-                {this.renderCreateRoom()}
-            </>
-        );
-    }
-}
+                <div className='create'>
+                    <MyButton
+                        label='Create Room'
+                        onClick={createNewRoom}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default connect()(LandingPage)

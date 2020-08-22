@@ -1,21 +1,20 @@
-import React, {PureComponent} from 'react';
-import Page from "../Pages/page";
+import React from 'react';
 
-export default class MyInput extends PureComponent{
-    render() {
-        const {
-            type, id, onChangeText, className, placeholder, name
-        } = this.props;
-
-        return (
+const MyInput = (props) => {
+    return (
+        <div className='my-input-container'>
+            <div className='label'>
+                {props.placeholder}
+            </div>
             <input
-                type={type}
-                id={id}
-                name={name}
-                onChange={onChangeText}
-                className={`my-input-container ${className}`}
-                placeholder={placeholder}
+                type={props.type}
+                id={props.id}
+                name={props.name}
+                onChange={props.onChangeText}
+                className={`input ${props.className ?? ''}`}
             />
-        );
-    }
-}
+        </div>
+    );
+};
+
+export default MyInput;

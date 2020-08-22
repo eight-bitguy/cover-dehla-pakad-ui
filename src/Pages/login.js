@@ -1,37 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import connect from 'react-redux/es/connect/connect';
-import Page from "./page";
+import { replace } from 'connected-react-router'
 import MyInput from "../Components/myInput";
 import MyButton from "../Components/myButton";
 import {addUser} from "../Redux/modules/users";
-import Url from "../url";
+import Url from "../JS/url";
 import { login } from "../Api/login";
 import {updateLoggedInUserId} from "../Redux/modules/additionalInfo";
 import {batch} from "react-redux";
+import User from "../Models/user";
 
+const Login = (props) => {
+    const [user, _setUser] = useState(new User());
+    const [isLoading, setLoading] = useState(false);
 
-class Login extends Page {
-    constructor(props) {
-        super(props);
-        this.state={
-            email: 'sj@jain.com',
-            password: 'shanuJain',
-            errors: []
-        };
-    }
+    const setUser = (e) => {
+        user.set(e.target.name, e.target.value);
+        _setUser(user);
+    };
 
-    login = async () => {
-        const { email, password} = this.state;
-        const isValid = email && password;
-
-        if (!isValid) {
+    const onLogin = async () => {
+        if (!user.isValidForLogin()) {
             return;
         }
 
-        const response = await login(this.state);
+        setLoading(true);
+        const response = await login(user.attributes);
 
         if (!response.data) {
-            this.setState({errors: response.errors});
+            setLoading(false);
             return;
         }
 
@@ -39,41 +36,36 @@ class Login extends Page {
         await window.setToken(userProfile['token']);
 
         await batch(async () => {
-            await this.props.dispatch(addUser([userProfile]));
-            await this.props.dispatch(updateLoggedInUserId(userProfile.id));
+            await props.dispatch(addUser([userProfile]));
+            await props.dispatch(updateLoggedInUserId(userProfile.id));
         });
-        this.props.history.push(Url.LandingPage);
+        setLoading(false);
+        props.dispatch(replace(Url.LandingPage));
     };
 
-    render() {
-        return (
-            <div className="row mt-5">
-            {this.state.error}
-                <div className="col-md-4 col-10 offset-md-4 offset-1">
-                    <div>{this.state.errors.length ? this.state.errors[0] : ''}</div>
-                    <MyInput
-                        type='text'
-                        name='email'
-                        className='mt-3'
-                        placeholder='Email'
-                        onChangeText={this.onChangeText}
-                    />
-                    <MyInput
-                        type='password'
-                        name='password'
-                        className='mt-3'
-                        placeholder='Password'
-                        onChangeText={this.onChangeText}
-                    />
-                    <MyButton
-                        type={MyButton.TYPE_BIG_ROUND_BUTTON}
-                        onClick={this.login}
-                        label='Login'
-                        className='mt-5'/>
-                </div>
+    return (
+        <div className="login-container">
+            <div className="login">
+                <MyInput
+                    type='text'
+                    name='email'
+                    placeholder='Email'
+                    onChangeText={setUser}
+                />
+                <MyInput
+                    type='password'
+                    name='password'
+                    placeholder='Password'
+                    onChangeText={setUser}
+                />
+                <MyButton
+                    loading={isLoading}
+                    onClick={onLogin}
+                    label='Login'
+                />
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default connect()(Login);

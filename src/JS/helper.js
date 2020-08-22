@@ -1,11 +1,10 @@
-import {store} from "./index";
-import User from "./Models/user";
-import {addCardsInHand} from "./Redux/modules/cards";
-import {addUser} from "./Redux/modules/users";
-import {addUsersInRoom} from "./Redux/modules/roomUsers";
-import {getJoinedUses, joinRoom} from "./Api/room";
-import {addRoom} from "./Redux/modules/rooms";
-import {updateCurrentRoom} from "./Redux/modules/additionalInfo";
+import {store} from "../index";
+import User from "../Models/user";
+import {addCardsInHand} from "../Redux/modules/cards";
+import {addUser} from "../Redux/modules/users";
+import {addUsersInRoom} from "../Redux/modules/roomUsers";
+import {getJoinedUses, joinRoom} from "../Api/room";
+import {addRoom} from "../Redux/modules/room";
 import {batch} from "react-redux";
 
 /**
@@ -175,7 +174,12 @@ export function isMyChance() {
  * @returns {Promise<void>}
  */
 export async function joinNewUsers(users) {
-    const roomUsers = users.map(user => user['room_users'].data);
+    const roomUsers = users.map(user => ({
+        name: user.name,
+        userId: user.id,
+        email: user.email,
+        position: user['room_users'].data.position,
+    }));
     users.forEach((user, index) => {
         delete users[index]['room_users'];
     });
@@ -224,10 +228,8 @@ export async function joinRoomWithRoomCode(roomCode) {
 
     await batch(async () => {
         await store.dispatch(addRoom(roomDetails));
-        await store.dispatch(updateCurrentRoom(roomDetails.code));
     });
 
-    window.setRoomCode(roomDetails.code);
     return true;
 }
 

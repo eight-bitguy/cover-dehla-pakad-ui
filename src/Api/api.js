@@ -1,4 +1,4 @@
-import Url from "../url";
+import Url from "../JS/url";
 
 const caller = require('axios').default;
 

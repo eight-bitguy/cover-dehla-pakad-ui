@@ -1,4 +1,4 @@
-import { mergeBasedOnAttribute } from "../../helper";
+import { mergeBasedOnAttribute } from "../../JS/helper";
 
 const ADD_USER = 'ADD_USER';
 

@@ -3,16 +3,16 @@ import Page from "./page";
 import Pusher from "pusher-js";
 import Echo from "laravel-echo";
 import {Switch, Route} from "react-router-dom";
-import Url from "../url";
+import Url from "../JS/url";
 import LandingPage from "./landingPage";
-import AppEventEmitter, { AppEvent } from './../events';
+import AppEventEmitter, { AppEvent } from '../JS/events';
 import GamePage from "./gamePage";
 import JoiningPage from "./joiningPage";
 import connect from 'react-redux/es/connect/connect';
-import {addRoom} from "../Redux/modules/rooms";
+import {addRoom} from "../Redux/modules/room";
 import {updateNextChance} from "../Redux/modules/additionalInfo";
 import {updateOldStake, updateStake} from "../Redux/modules/cards";
-import {addAlreadyJoinedUsers, joinNewUsers, joinRoomWithRoomCode} from "../helper";
+import {addAlreadyJoinedUsers, joinNewUsers, joinRoomWithRoomCode} from "../JS/helper";
 import {batch} from "react-redux";
 
 
@@ -59,12 +59,7 @@ class WorkspaceContainer extends Page {
     };
 
     async componentDidMount() {
-        const roomCode = window.getRoomCode();
-        if (!roomCode) {
-            return;
-        }
-
-        await this.fetchRoomDetails(roomCode);
+        // await this.fetchRoomDetails(roomCode);
     }
 
     handleNewPlayerJoinEvent = async (e) => {

@@ -1,0 +1,35 @@
+@import "variables";
+
+.my-input-container {
+  width: 100%;
+  margin-bottom: 15px;
+
+  .input {
+    border-radius: 25px;
+    border: 1px solid $primary-color;
+    outline: none;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    background: inherit;
+    font-weight: bold;
+    font-family: $primary-font;
+    color: $primary-color;
+    font-size: 30px;
+  }
+
+  .label {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+    color: $primary-color;
+    font-family: $primary-font;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  &__login {
+    text-align: center;
+
+  }
+}

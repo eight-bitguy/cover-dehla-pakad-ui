@@ -8,16 +8,15 @@
     "backbone-associations": "^0.6.2",
     "bootstrap": "^4.5.0",
     "cardsJS": "^1.1.1",
-    "connected-react-router": "^6.8.0",
+    "connected-react-router": "^6.0.0",
     "fbemitter": "^2.1.1",
     "history": "^4.10.1",
     "immutability-helper": "^3.1.1",
     "laravel-echo": "^1.8.0",
     "memoize": "^0.1.1",
-    "node-sass-chokidar": "^1.5.0",
+    "node-sass": "^4.14.1",
     "pusher-js": "^6.0.3",
     "react": "^16.13.1",
-    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-playing-card": "^0.2.5",
     "react-redux": "^7.2.0",
@@ -29,12 +28,18 @@
     "socket.io": "^2.3.0",
     "underscore": "^1.10.2"
   },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "onchange": "^7.0.2",
+    "parallelshell": "^3.0.2"
+  },
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build:js": "react-scripts build",
+    "build:css": "node-sass --output-style compressed -o src/css src/scss",
+    "build:all": "npm run build:css && npm run build:js",
+    "watch:css": "onchange 'src/scss/*.scss' -- npm run build:css",
+    "watch:all": "parallelshell 'npm start' 'npm run watch:css'"
   },
   "eslintConfig": {
     "extends": "react-app"
