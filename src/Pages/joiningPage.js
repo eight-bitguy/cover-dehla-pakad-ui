@@ -2,7 +2,6 @@ import React from 'react';
 import { replace } from 'connected-react-router'
 import connect from 'react-redux/es/connect/connect';
 import MyButton from "../Components/myButton";
-import {getCurrentRoom} from "../JS/helper";
 import Room from "../Models/room";
 import Url from "../JS/url";
 import Page from "./page";
@@ -11,6 +10,7 @@ import {addRoom} from "../Redux/modules/room";
 import RoomUsers from "../Collections/roomUsers";
 import Users from "../Collections/users";
 import Loader from "../Components/loader";
+import {startRoom} from "../Api/room";
 
 class JoiningPage extends Page {
 
@@ -54,8 +54,8 @@ class JoiningPage extends Page {
     };
 
     startRoom = async () => {
-        const currentRoom = getCurrentRoom();
-        await this.startRoom(currentRoom.code);
+        const {room} = this.state;
+        await startRoom(room.get('code'));
     };
 
     render() {

@@ -55,21 +55,16 @@ export function getLoggedInUser() {
  */
 export function getCurrentRoom() {
     const reduxStore = getStore();
-    const { rooms, additionalInfo } = reduxStore;
-
-    return rooms.find((room) => room.code === additionalInfo.currentRoomCode);
+    return reduxStore.room;
 }
 
 /**
  *
- * @param roomCode
  * @returns {*}
  */
-function getRoomUserModels(roomCode) {
+function getRoomUserModels() {
     const reduxStore = getStore();
-    const { roomUsers } = reduxStore;
-
-    return roomUsers.filter(roomUser => roomUser.roomCode === roomCode);
+    return reduxStore.roomUsers;
 }
 
 /**
@@ -153,10 +148,9 @@ export function getCurrentRoomUserModels() {
  * @returns {*}
  */
 export function myPositionInCurrentRoom() {
-    const {additionalInfo} = getStore();
-    const allUsers = getCurrentRoomUserModels();
-    return allUsers && allUsers.length ?
-        (allUsers.find(user => +user.userId === +additionalInfo.loggedInUserId).position || '' ): '';
+    const {additionalInfo, roomUsers} = getStore();
+    return roomUsers && roomUsers.length ?
+        (roomUsers.find(user => +user.userId === +additionalInfo.loggedInUserId).position || '' ): '';
 }
 
 /**

@@ -3,13 +3,15 @@ import Page from './page';
 import connect from 'react-redux/es/connect/connect';
 import {getInitialCards, play} from "../Api/game";
 import Cards from "../Components/cards";
-import {getLoggedInUser, isMyChance, myPositionInCurrentRoom, removeCardFromHand} from "../JS/helper";
+import Card from "../Models/card";
+import { replace } from 'connected-react-router'
+import {isMyChance, removeCardFromHand} from "../JS/helper";
 import Url from "../JS/url";
 import MyButton from "../Components/myButton";
-import {store} from "./../index";
 import {addCardsInHand, updateOldStake, updateStake} from "../Redux/modules/cards";
 import {updateNextChance} from "../Redux/modules/additionalInfo";
 import {batch} from "react-redux";
+import Room from "../Models/room";
 
 class GamePage extends Page {
 
@@ -22,7 +24,10 @@ class GamePage extends Page {
     }
 
     async componentDidMount() {
-        const data = await getInitialCards(window.getRoomCode());
+        const data = await getInitialCards(this.props.room.get('code'));
+        if (!data) {
+            this.props.dispatch(replace(Url.LandingPage));
+        }
         console.log(data);
         await batch(async () => {
             await this.props.dispatch(addCardsInHand(data.initialCards));
@@ -30,13 +35,6 @@ class GamePage extends Page {
             await this.props.dispatch(updateOldStake(data.oldStake));
             await this.props.dispatch(updateNextChance(data.nextChance));
         });
-
-        const {additionalInfo} = this.props;
-        const roomCode = additionalInfo.currentRoomCode ?? window.getRoomCode();
-
-        if (!roomCode) {
-            this.props.history.push(Url.LandingPage);
-        }
     };
 
     onClickOnCard = async (rank, suit) => {
@@ -59,39 +57,17 @@ class GamePage extends Page {
         this.setState({cardToPlay: null});
     };
 
-    renderCurrentChangeNotification = () => {
-        if (!isMyChance()) {
-            return <div />;
-        }
-
-        return (
-            <div className='row chance-notification'>
-                Your chance
-            </div>
-        );
-    };
-
     renderStake = () => {
-        const cards = this.props.cards;
-        const {additionalInfo} = this.props;
-        const user = getLoggedInUser();
-
-
+        const {cards} = this.props;
         return (
-            <div className='row '>
-                <div className='col-md-2 offset-md-0'>
-                    <Cards cards={cards.oldStake} onClickOnCard={() => {}}/>
+            <div className=''>
+                <div className=''>
+                    <Cards cards={cards.get('oldStake')} onClickOnCard={() => {}}/>
                 </div>
-                <div className='col-md-2 offset-md-1'>
-                    <Cards cards={cards.stake} onClickOnCard={() => {}}/>
+                <div className=''>
+                    <Cards cards={cards.get('stake')} onClickOnCard={() => {}}/>
                 </div>
-                <div className='col-md-2 offset-md-1'>
-                    <p>{`User name : ${user.name}`}</p>
-                    <p>{`User position : ${myPositionInCurrentRoom()}`}</p>
-                    <p>{`Next chance : ${additionalInfo.nextChance}`}</p>
-                </div>
-
-                <div className='col-md-3 offset-md-1 col-2 offset-2'>
+                <div className=''>
                     <MyButton
                         label='Play'
                         onClick={this.playSelectedCard}
@@ -106,22 +82,18 @@ class GamePage extends Page {
         const { cardToPlay } = this.state;
 
         return (
-            <div className='row'>
-            {/*<div className='row' style={{position: 'absolute', bottom: '160px'}}>*/}
-                <div className='col-md-8 offset-md-3 col-8 offset-2'>
-                    <Cards cards={cards.hand} onClickOnCard={this.onClickOnCard} selectedCard={cardToPlay}/>
+            <div className=''>
+                <div className=''>
+                    <Cards cards={cards.get('hand')} onClickOnCard={this.onClickOnCard} selectedCard={cardToPlay}/>
                 </div>
             </div>
         );
     };
 
-    renderGameInfo = () => {
-    };
-
     render() {
+        console.log(this.props);
         return (
             <div>
-                {this.renderCurrentChangeNotification()}
                 {this.renderStake()}
                 {this.renderHand()}
             </div>
@@ -129,11 +101,12 @@ class GamePage extends Page {
     }
 }
 
-function mapStateToProps({cards, additionalInfo, roomUsers}) {
+function mapStateToProps({cards, additionalInfo, roomUsers, room}) {
     return {
-        cards,
+        cards: new Card(cards),
         additionalInfo,
-        roomUsers
+        roomUsers,
+        room: new Room(room)
     };
 }
 

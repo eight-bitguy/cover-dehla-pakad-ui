@@ -4,17 +4,20 @@ import Pusher from "pusher-js";
 import Echo from "laravel-echo";
 import {Switch, Route} from "react-router-dom";
 import Url from "../JS/url";
-import LandingPage from "./landingPage";
 import AppEventEmitter, { AppEvent } from '../JS/events';
-import GamePage from "./gamePage";
-import JoiningPage from "./joiningPage";
 import connect from 'react-redux/es/connect/connect';
 import {addRoom} from "../Redux/modules/room";
-import {updateNextChance} from "../Redux/modules/additionalInfo";
+import {updateLoggedInUserId, updateNextChance} from "../Redux/modules/additionalInfo";
 import {updateOldStake, updateStake} from "../Redux/modules/cards";
 import {addAlreadyJoinedUsers, joinNewUsers, joinRoomWithRoomCode} from "../JS/helper";
 import {batch} from "react-redux";
+import {getMe} from "../Api/user";
+import {addUser} from "../Redux/modules/users";
+import PageLoadable from "../Components/loadable";
 
+const GamePage = PageLoadable({ loader: () => import('./gamePage') });
+const JoiningPage = PageLoadable({loader: () => import('./joiningPage')});
+const LandingPage = PageLoadable({loader: () => import('./landingPage')});
 
 class WorkspaceContainer extends Page {
     constructor(props) {
@@ -59,6 +62,13 @@ class WorkspaceContainer extends Page {
     };
 
     async componentDidMount() {
+        const response = await getMe();
+        if (response && response.data) {
+            this.props.dispatch(addUser([response.data]));
+            this.props.dispatch(updateLoggedInUserId(response.data.id));
+        }
+
+        console.log(response);
         // await this.fetchRoomDetails(roomCode);
     }
 

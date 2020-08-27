@@ -100,3 +100,19 @@ code {
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+
+.card {
+  margin: 2px;
+  display: unset;
+  background-color: inherit;
+}
+
+.my-cards{
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.-is-selected {
+  border: 2px solid $primary-color;
+}

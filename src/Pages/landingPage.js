@@ -9,7 +9,7 @@ import Room from "../Models/room";
 
 const LandingPage = (props) => {
 
-    const [room, _setRoom] = useState(new Room());
+    const [room, _setRoom] = useState(new Room({'code': '356226'}));
 
     const setRoom = (e) => {
         room.set(e.target.name, e.target.value);
