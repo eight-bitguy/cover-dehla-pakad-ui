@@ -3,9 +3,9 @@ export default class Url {
         return '/home';
     }
 
-    static get GamePage() {
-        return '/game';
-    }
+    static GamePage = (roomCode) => {
+        return `/game/${roomCode ? roomCode : ':roomCode'}`;
+    };
 
     static JoiningGame = (roomCode) => {
         return `/joining/${roomCode ? roomCode : ':roomCode'}`;
@@ -17,5 +17,9 @@ export default class Url {
 
     static get Login() {
         return '/login';
+    }
+
+    static get Home() {
+        return '/';
     }
 }

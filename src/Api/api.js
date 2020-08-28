@@ -14,10 +14,11 @@ export function addInterceptor() {
             return response.data ? response.data : response;
         },
         function (error) {
-            if (error.data && +error.data.status_code === 401) {
+            if (error.response.status === 401) {
                 window.logout();
-                window.location.href = window.location.host + Url.Login;
+                window.location.href = window.location.host + Url.Home;
             }
+            return error.data ? error.data : error;
         });
 }
 export async function get(uri){

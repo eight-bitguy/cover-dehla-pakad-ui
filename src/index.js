@@ -7,7 +7,6 @@ import {ConnectedRouter} from "connected-react-router";
 import Router from "./JS/router";
 import {addInterceptor} from "./Api/api";
 import reduxStore from "./JS/store";
-import Url from "./JS/url";
 
 export const store = reduxStore;
 window.logout = () => {
@@ -20,6 +19,14 @@ window.getToken = () => {
 
 window.setToken = (token) => {
     localStorage.setItem('token', token);
+};
+
+window.setRoomCode = (code) => {
+    localStorage.setItem('room-code', code);
+};
+
+window.getRoomCode = () => {
+    return localStorage.getItem('room-code');
 };
 
 window.apiUrl = () => `http://${window.location.hostname}:8000`;

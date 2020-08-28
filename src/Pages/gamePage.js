@@ -5,7 +5,7 @@ import {getInitialCards, play} from "../Api/game";
 import Cards from "../Components/cards";
 import Card from "../Models/card";
 import { replace } from 'connected-react-router'
-import {isMyChance, removeCardFromHand} from "../JS/helper";
+import {isMyChance, myPositionInCurrentRoom, removeCardFromHand} from "../JS/helper";
 import Url from "../JS/url";
 import MyButton from "../Components/myButton";
 import {addCardsInHand, updateOldStake, updateStake} from "../Redux/modules/cards";
@@ -17,18 +17,18 @@ class GamePage extends Page {
 
     constructor(props) {
         super(props);
-
+        window.setRoomCode(props.match.params.roomCode);
         this.state = {
             cardToPlay: null
         };
     }
 
     async componentDidMount() {
-        const data = await getInitialCards(this.props.room.get('code'));
+        const data = await getInitialCards('601371');
         if (!data) {
             this.props.dispatch(replace(Url.LandingPage));
+            return;
         }
-        console.log(data);
         await batch(async () => {
             await this.props.dispatch(addCardsInHand(data.initialCards));
             await this.props.dispatch(updateStake(data.initialStake));
@@ -37,9 +37,8 @@ class GamePage extends Page {
         });
     };
 
-    onClickOnCard = async (rank, suit) => {
-        const card = `${rank}${suit}`;
-        this.setState({cardToPlay: card});
+    onClickOnCard = async (cardToPlay) => {
+        this.setState({ cardToPlay });
     };
 
     playSelectedCard = async () => {
@@ -50,24 +49,33 @@ class GamePage extends Page {
         }
 
         removeCardFromHand(cardToPlay);
-        const {additionalInfo} = this.props;
+        const {room} = this.props;
         const data = { card: cardToPlay };
-        await play(additionalInfo.currentRoomCode, data);
+        await play(room.get('code'), data);
 
         this.setState({cardToPlay: null});
     };
 
-    renderStake = () => {
-        const {cards} = this.props;
+    render() {
+        const { cards } = this.props;
+        const { cardToPlay } = this.state;
+        const myChance = isMyChance();
         return (
-            <div className=''>
-                <div className=''>
-                    <Cards cards={cards.get('oldStake')} onClickOnCard={() => {}}/>
+            <div className='game-page-container'>
+                <div className='hand-stake-container'>
+                    <div className='hand-stake'>
+                        <Cards cards={cards.get('hand')} onClickOnCard={this.onClickOnCard} selectedCard={cardToPlay}/>
+                    </div>
                 </div>
-                <div className=''>
-                    <Cards cards={cards.get('stake')} onClickOnCard={() => {}}/>
+                <div className='stake-container'>
+                    <div className='old-stake'>
+                        <Cards cards={cards.get('oldStake')} onClickOnCard={() => {}}/>
+                    </div>
+                    <div className='stake'>
+                        <Cards cards={cards.get('stake')} onClickOnCard={() => {}}/>
+                    </div>
                 </div>
-                <div className=''>
+                <div className={`play-button ${myChance ? '' : 'display-none'}`}>
                     <MyButton
                         label='Play'
                         onClick={this.playSelectedCard}
@@ -75,36 +83,12 @@ class GamePage extends Page {
                 </div>
             </div>
         );
-    };
-
-    renderHand = () => {
-        const { cards } = this.props;
-        const { cardToPlay } = this.state;
-
-        return (
-            <div className=''>
-                <div className=''>
-                    <Cards cards={cards.get('hand')} onClickOnCard={this.onClickOnCard} selectedCard={cardToPlay}/>
-                </div>
-            </div>
-        );
-    };
-
-    render() {
-        console.log(this.props);
-        return (
-            <div>
-                {this.renderStake()}
-                {this.renderHand()}
-            </div>
-        );
     }
 }
 
-function mapStateToProps({cards, additionalInfo, roomUsers, room}) {
+function mapStateToProps({cards, roomUsers, room}) {
     return {
         cards: new Card(cards),
-        additionalInfo,
         roomUsers,
         room: new Room(room)
     };

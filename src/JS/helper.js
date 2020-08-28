@@ -60,15 +60,6 @@ export function getCurrentRoom() {
 
 /**
  *
- * @returns {*}
- */
-function getRoomUserModels() {
-    const reduxStore = getStore();
-    return reduxStore.roomUsers;
-}
-
-/**
- *
  * @returns {{}}
  */
 function getStore() {
@@ -77,34 +68,9 @@ function getStore() {
 
 /**
  *
- * @param roomCode
- * @returns {*}
- */
-function getRoomUser(roomCode) {
-    const { users } = getStore();
-    const roomUserModels = getRoomUserModels(roomCode);
-    const roomUserModelIds = roomUserModels.map(roomUser => +roomUser.userId);
-
-    return users.filter(user => roomUserModelIds.includes(user.id));
-}
-
-/**
- *
- * @returns {*}
- */
-export function getCurrentRoomUsers() {
-    const currentRoom = getCurrentRoom();
-    if (currentRoom) {
-        return getRoomUser(currentRoom.code);
-    }
-    return [];
-}
-
-/**
- *
  * @returns {boolean}
  */
-export function isUserCurrentRoomAdmin() {
+export function isAdmin() {
     const {roomUsers} = getStore();
     const currentRoom = getCurrentRoom();
     const user = getLoggedInUser();
@@ -115,7 +81,6 @@ export function isUserCurrentRoomAdmin() {
 
     return !!(roomUsers.find(roomUser =>
         +roomUser.userId === user.id &&
-        roomUser.roomCode === currentRoom.code &&
         roomUser.position === User.ROOM_USER_POSITION
     ));
 }
@@ -130,17 +95,6 @@ export function removeCardFromHand(card)
     const currentHand = cards.hand;
     currentHand.splice(currentHand.indexOf(card), 1);
     store.dispatch(addCardsInHand(currentHand));
-}
-
-/**
- *
- * @returns {*}
- */
-export function getCurrentRoomUserModels() {
-    const currentRoom = getCurrentRoom();
-    if (currentRoom) {
-        return getRoomUserModels(currentRoom.code);
-    }
 }
 
 /**
@@ -195,19 +149,6 @@ export async function addAlreadyJoinedUsers(roomCode) {
 }
 
 /**
- * Fetch room details if not available
- * @param roomCode
- * @returns {Promise<void>}
- */
-export async function fetchRoomDetailsIfNotAvailable(roomCode) {
-    const {rooms} = getStore();
-    const requiredRoom = rooms.find(room => room.code === roomCode);
-    if (!requiredRoom) {
-        await joinRoomWithRoomCode(roomCode);
-    }
-}
-
-/**
  *
  * @param roomCode
  * @returns {Promise<boolean>}
@@ -219,27 +160,7 @@ export async function joinRoomWithRoomCode(roomCode) {
     }
 
     const roomDetails = response.data;
-
-    await batch(async () => {
-        await store.dispatch(addRoom(roomDetails));
-    });
+    await store.dispatch(addRoom(roomDetails));
 
     return true;
-}
-
-/**
- *
- * @param users
- * @param roomCode
- * @returns {*}
- */
-export function getUsersWithPosition(users, roomCode) {
-    if (!users) {
-        return [];
-    }
-    const { roomUsers } = getStore();
-    return users.map(user => {
-        user.roomUser = roomUsers.find(roomUser => +roomUser.userId === user.id && roomUser.roomCode === roomCode);
-        return user;
-    });
 }

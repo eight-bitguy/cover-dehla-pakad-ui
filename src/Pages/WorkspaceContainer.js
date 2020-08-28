@@ -1,7 +1,5 @@
 import React from 'react';
 import Page from "./page";
-import Pusher from "pusher-js";
-import Echo from "laravel-echo";
 import {Switch, Route} from "react-router-dom";
 import Url from "../JS/url";
 import AppEventEmitter, { AppEvent } from '../JS/events';
@@ -14,44 +12,20 @@ import {batch} from "react-redux";
 import {getMe} from "../Api/user";
 import {addUser} from "../Redux/modules/users";
 import PageLoadable from "../Components/loadable";
+import WebSocket from "../JS/websocket";
 
 const GamePage = PageLoadable({ loader: () => import('./gamePage') });
 const JoiningPage = PageLoadable({loader: () => import('./joiningPage')});
 const LandingPage = PageLoadable({loader: () => import('./landingPage')});
 
 class WorkspaceContainer extends Page {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            pusherSubscribedToRoom: null
-        };
-
-        window.pusher = Pusher;
-        this.initializeWebsocket();
-        AppEventEmitter.addListener(AppEvent.addPrivateChannel, this.addPrivateChannel);
-    }
-
-    static echoClient;
-
-    //ToDo Externalise env variables
-    initializeWebsocket = () => {
-        WorkspaceContainer.echoClient = new Echo({
-            broadcaster: 'pusher',
-            cluster: 'ap2',
-            authEndpoint: `${window.apiUrl()}/api/broadcasting/auth`,
-            key: '55d05ff09859c119f84f',
-            activityTimeout: 60000,
-            auth: {
-                headers: {
-                    Authorization: 'Bearer ' + window.getToken(),
-                }
-            },
-            forceTLS: true
-        });
-    };
+    webSocket;
 
     fetchRoomDetails = async (roomCode) => {
+        if (!roomCode) {
+            return;
+        }
         if (!await joinRoomWithRoomCode(roomCode)) {
             return;
         }
@@ -62,30 +36,33 @@ class WorkspaceContainer extends Page {
     };
 
     async componentDidMount() {
+        this.webSocket = new WebSocket();
         const response = await getMe();
+
         if (response && response.data) {
             this.props.dispatch(addUser([response.data]));
             this.props.dispatch(updateLoggedInUserId(response.data.id));
         }
 
-        console.log(response);
-        // await this.fetchRoomDetails(roomCode);
+        AppEventEmitter.addListener(AppEvent.addPrivateChannel, this.addPrivateChannel);
+        await this.fetchRoomDetails(window.getRoomCode());
+    }
+
+    async componentWillUnmount() {
+        await this.webSocket.unSubscribe();
     }
 
     handleNewPlayerJoinEvent = async (e) => {
-        console.log('handleNewPlayerJoinEvent', e);
         await joinNewUsers(e.data);
     };
 
     handleStartRoomEvent = async (e) => {
-        console.log('handleNewGameEvent', e);
         const room = e.data;
         await this.props.dispatch(addRoom(room));
-        this.props.history.push(Url.GamePage);
+        this.props.history.push(Url.GamePage(room.code));
     };
 
     handleNewGameEvent = async (e) => {
-        console.log('handleNewGameEvent', e);
         await batch(async () => {
             await this.props.dispatch(updateNextChance(e.nextChance));
             await this.props.dispatch(updateOldStake(e.oldStake));
@@ -94,24 +71,21 @@ class WorkspaceContainer extends Page {
     };
 
     addPrivateChannel = async (roomCode) => {
-        const { pusherSubscribedToRoom } = this.state;
         const channelId = `App.room.${roomCode}`;
 
-        if (pusherSubscribedToRoom && (pusherSubscribedToRoom === roomCode)) {
-            return;
-        }
-        await WorkspaceContainer.echoClient.private(channelId)
-            .listen('BroadcastNewPlayerJoinEvent', this.handleNewPlayerJoinEvent)
-            .listen('BroadcastRoomStartEvent', this.handleStartRoomEvent)
-            .listen('BroadcastNewGameEvent', this.handleNewGameEvent);
-        await this.setState({ pusherSubscribedToRoom: roomCode });
+        const listeners = {
+            BroadcastNewPlayerJoinEvent: this.handleNewPlayerJoinEvent,
+            BroadcastRoomStartEvent: this.handleStartRoomEvent,
+            BroadcastNewGameEvent: this.handleNewGameEvent,
+        };
+        await this.webSocket.addPrivateChannel(channelId, listeners);
     };
 
     render() {
         return (
             <Switch>
-                <Route path={Url.GamePage} component={GamePage} />
-                <Route path={Url.LandingPage} component={LandingPage} />
+                <Route exact path={Url.GamePage()} component={GamePage} />
+                <Route exact path={Url.LandingPage} component={LandingPage} />
                 <Route path={Url.JoiningGame()} component={JoiningPage} />
             </Switch>
         );

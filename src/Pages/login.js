@@ -9,10 +9,12 @@ import { login } from "../Api/login";
 import {updateLoggedInUserId} from "../Redux/modules/additionalInfo";
 import {batch} from "react-redux";
 import User from "../Models/user";
+import Error from "../Components/error";
 
 const Login = (props) => {
     const [user, _setUser] = useState(new User());
     const [isLoading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const setUser = (e) => {
         user.set(e.target.name, e.target.value);
@@ -20,15 +22,17 @@ const Login = (props) => {
     };
 
     const onLogin = async () => {
-        if (!user.isValidForLogin()) {
+        setError(null);
+        if (!user.isValidForLogin() || isLoading) {
             return;
         }
 
         setLoading(true);
         const response = await login(user.attributes);
-
-        if (!response.data) {
+        const parsedResponse = response.response;
+        if (parsedResponse && parsedResponse.data && parsedResponse.data.errors) {
             setLoading(false);
+            setError(parsedResponse.data.errors);
             return;
         }
 
@@ -46,6 +50,7 @@ const Login = (props) => {
     return (
         <div className="login-container">
             <div className="login">
+                <Error error={error} />
                 <MyInput
                     type='text'
                     name='email'

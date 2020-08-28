@@ -7,3 +7,35 @@
 .hand-container {
   //position: absolute;
 }
+
+.game-page-container {
+  display: flex;
+  flex-direction: column;
+
+  .stake-container {
+
+  }
+
+  .old-stake {
+
+  }
+
+  .stake {
+
+  }
+
+  .play-button {
+
+  }
+
+  .hand-stake-container {
+    display: flex;
+    flex-direction: row;
+
+    .hand-stake {
+      display: flex;
+      justify-content: center;
+
+    }
+  }
+}

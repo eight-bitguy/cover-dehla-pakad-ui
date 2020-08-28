@@ -1,0 +1,13 @@
+@import "variables";
+
+.error-container {
+  display: flex;
+  justify-content: center;
+
+  .error {
+    font-family: $primary-font;
+    color: $primary-color;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}

@@ -78,6 +78,9 @@ code {
 .router {
   background-image: url("./../IMAGES/noise.png");
   height: 100vh;
+  padding-top: 10vh;
+  padding-bottom: 10vh
+;
 }
 
 .loader {
@@ -114,5 +117,11 @@ code {
 }
 
 .-is-selected {
-  border: 2px solid $primary-color;
+  .cus-card {
+    border: 2px solid $primary-color;
+  }
+}
+
+.display-none {
+  display: none;
 }

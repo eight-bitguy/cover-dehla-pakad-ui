@@ -11,6 +11,7 @@ import RoomUsers from "../Collections/roomUsers";
 import Users from "../Collections/users";
 import Loader from "../Components/loader";
 import {startRoom} from "../Api/room";
+import {isAdmin} from "../JS/helper";
 
 class JoiningPage extends Page {
 
@@ -58,6 +59,28 @@ class JoiningPage extends Page {
         await startRoom(room.get('code'));
     };
 
+    renderFooter = () => {
+        const {roomUsers} = this.props;
+
+        if (roomUsers.length < 4) {
+            return <span className='note'>Waiting for users to join</span>
+        }
+
+        if (!isAdmin()) {
+            return <span className='note'>Ask admin to start the game</span>;
+        }
+
+        return (
+            <div className='start-button'>
+                <MyButton
+                    label='Start game'
+                    onClick={this.startRoom}
+                    disabled={roomUsers.length !== 4}
+                />
+            </div>
+        );
+    };
+
     render() {
         const {room} = this.state;
         const roomCode = room.get('code');
@@ -67,19 +90,15 @@ class JoiningPage extends Page {
         return (
             <div className='joining-page-container'>
                 <div className='joining-page'>
-                    <div className='code'>
-                        {`Room code : ${roomCode}`}
+                    <div className='code-div'>
+                        <span className='code'>Code</span>
+                        <span className='code'>:</span>
+                        <span className='code'>{roomCode}</span>
                     </div>
                     <div className={`users ${additionClass}`}>
                         {this.renderJoinedUser()}
                     </div>
-                    <div className='start-button'>
-                        <MyButton
-                            label='Start game'
-                            onClick={this.startRoom}
-                            disabled={roomUsers.length !== 4}
-                        />
-                    </div>
+                    {this.renderFooter()}
                 </div>
             </div>
         );

@@ -1,7 +1,6 @@
 @import "variables";
 
 .joining-page-container {
-  padding-top: 15vh;
   display: flex;
 
   .joining-page {
@@ -11,16 +10,17 @@
     align-items: center;
     width: 100%;
 
-    .code {
+    .code-div {
       display: flex;
-      justify-content: center;
+      flex-direction: row;
+      justify-content: space-between;
+      min-width: 50%;
+    }
+    .code {
+      font-weight: bold;
       font-size: 30px;
       font-family: $primary-font;
       color: $primary-color;
-
-      span {
-        font-weight: bold;
-      }
     }
 
     .-loading {
@@ -28,7 +28,7 @@
     }
 
     .users {
-      height: 30vh;
+      min-height: 30vh;
       margin-top: 30px;
       margin-bottom: 30px;
       width: 50%;
@@ -49,7 +49,6 @@
         margin-top: 10px;
         height: 25px;
         border-bottom: 1px solid $light-primary-color;
-
       }
     }
 
@@ -62,6 +61,13 @@
     .loader-container {
       display: flex;
       justify-content: center;
+    }
+
+    .note {
+      font-size: 20px;
+      font-family: $primary-font;
+      color: $primary-color;
+      font-weight: bold;
     }
 
   }
