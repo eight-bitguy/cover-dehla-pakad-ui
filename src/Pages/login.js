@@ -10,6 +10,7 @@ import {updateLoggedInUserId} from "../Redux/modules/additionalInfo";
 import {batch} from "react-redux";
 import User from "../Models/user";
 import Error from "../Components/error";
+import GoBack from "../Components/back";
 
 const Login = (props) => {
     const [user, _setUser] = useState(new User());
@@ -50,6 +51,7 @@ const Login = (props) => {
     return (
         <div className="login-container">
             <div className="login">
+                <GoBack url={Url.Home}/>
                 <Error error={error} />
                 <MyInput
                     type='text'

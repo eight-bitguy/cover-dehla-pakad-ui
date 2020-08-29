@@ -21,16 +21,21 @@
   }
 
   .stake {
-
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
   }
 
   .play-button {
-
+    margin-top: 2vh;
   }
 
   .hand-stake-container {
+    padding-top: 3vh;
     display: flex;
+    justify-content: center;
     flex-direction: row;
+    padding-right: 10px;
 
     .hand-stake {
       display: flex;

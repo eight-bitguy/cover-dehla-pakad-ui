@@ -12,6 +12,7 @@ import Users from "../Collections/users";
 import Loader from "../Components/loader";
 import {startRoom} from "../Api/room";
 import {isAdmin} from "../JS/helper";
+import GoBack from "../Components/back";
 
 class JoiningPage extends Page {
 
@@ -59,22 +60,37 @@ class JoiningPage extends Page {
         await startRoom(room.get('code'));
     };
 
+    goToGame = () => {
+        const {room} = this.state;
+        const url = Url.GamePage(room.get('code'));
+        this.props.dispatch(replace(url));
+    };
+
     renderFooter = () => {
         const {roomUsers} = this.props;
+        const {room} = this.state;
 
         if (roomUsers.length < 4) {
             return <span className='note'>Waiting for users to join</span>
         }
 
-        if (!isAdmin()) {
+        if (!isAdmin() && !room.isActive()) {
             return <span className='note'>Ask admin to start the game</span>;
+        }
+
+        let onClick = this.startRoom;
+        let buttonLabel = 'Start game';
+
+        if (room.isActive()) {
+            buttonLabel = 'Join';
+            onClick = this.goToGame
         }
 
         return (
             <div className='start-button'>
                 <MyButton
-                    label='Start game'
-                    onClick={this.startRoom}
+                    label={buttonLabel}
+                    onClick={onClick}
                     disabled={roomUsers.length !== 4}
                 />
             </div>
@@ -90,6 +106,7 @@ class JoiningPage extends Page {
         return (
             <div className='joining-page-container'>
                 <div className='joining-page'>
+                    <GoBack url={Url.LandingPage}/>
                     <div className='code-div'>
                         <span className='code'>Code</span>
                         <span className='code'>:</span>

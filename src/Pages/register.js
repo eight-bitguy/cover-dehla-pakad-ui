@@ -6,6 +6,7 @@ import MyButton from "../Components/myButton";
 import {registerUser} from "../Api/user";
 import Url from "../JS/url";
 import User from "../Models/user";
+import GoBack from "../Components/back";
 
 const Register = (props) => {
     const [user, _setUser] = useState(new User());
@@ -27,6 +28,7 @@ const Register = (props) => {
     return (
         <div className="register-container">
             <div className="register">
+                <GoBack url={Url.Home}/>
                 <MyInput
                     type='text'
                     name='name'

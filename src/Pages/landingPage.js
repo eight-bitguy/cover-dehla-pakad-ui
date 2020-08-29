@@ -6,6 +6,8 @@ import Ruler from "../Components/ruler";
 import connect from 'react-redux/es/connect/connect';
 import Url from './../JS/url';
 import Room from "../Models/room";
+import LogoutHeader from "../Components/LogoutHeader";
+import About from "../Components/about";
 
 const LandingPage = (props) => {
 
@@ -30,6 +32,7 @@ const LandingPage = (props) => {
 
     return(
         <div className='landing-page-container'>
+            <LogoutHeader />
             <div className='landing'>
                 <div className='join-room'>
                     <div className='input'>

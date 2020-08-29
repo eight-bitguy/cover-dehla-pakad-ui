@@ -6,6 +6,7 @@ import {addUsersInRoom} from "../Redux/modules/roomUsers";
 import {getJoinedUses, joinRoom} from "../Api/room";
 import {addRoom} from "../Redux/modules/room";
 import {batch} from "react-redux";
+import Room from "../Models/room";
 
 /**
  *
@@ -163,4 +164,98 @@ export async function joinRoomWithRoomCode(roomCode) {
     await store.dispatch(addRoom(roomDetails));
 
     return true;
+}
+
+/**
+ *
+ * @param stake
+ * @param nextChance
+ * @returns {{}}
+ */
+export function getPositionCardMapping(stake, nextChance) {
+    const mapping = {};
+    let positionToCheck = nextChance;
+
+    if (!stake || !nextChance) {
+        return mapping;
+    }
+
+    stake.reverse();
+    stake.forEach((card) => {
+        positionToCheck = getPreviousPosition(positionToCheck);
+        mapping[positionToCheck] = card;
+    });
+
+    return arrangePositionAccordingToThePlayer(mapping);
+}
+
+/**
+ *
+ * @param position
+ * @returns {string}
+ */
+export function getPreviousPosition(position) {
+    const positionIndex = Room.ALL_POSITIONS.indexOf(position);
+    const previousPositionIndex = (positionIndex + 3) % 4;
+    return Room.ALL_POSITIONS[previousPositionIndex];
+}
+
+/**
+ *
+ * @param position
+ * @returns {*}
+ */
+export function getPlayerNameFromPosition(position) {
+    const {roomUsers} = getStore();
+    if (!roomUsers.length) {
+        return '';
+    }
+    return roomUsers.find(user => user.position === position).name;
+}
+
+/**
+ *
+ * @param mapping
+ * @returns {*[]}
+ */
+export function arrangePositionAccordingToThePlayer(mapping) {
+    const myPosition = myPositionInCurrentRoom();
+    const offset = Room.ALL_POSITIONS.indexOf(myPosition);
+
+    const arrangedPositions = [
+        Room.ALL_POSITIONS[(offset)],
+        Room.ALL_POSITIONS[(offset + 1) % 4],
+        Room.ALL_POSITIONS[(offset + 2) % 4],
+        Room.ALL_POSITIONS[(offset + 3) % 4]
+    ];
+
+    return arrangedPositions.map((position) => ({
+        position: position,
+        card: mapping[position]
+    }));
+}
+
+/**
+ *
+ * @param card
+ * @returns {string}
+ */
+export function mapCardToImage(card) {
+    const rankMap = {
+        'A': 'A',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        'T': '10',
+        'J': 'J',
+        'Q': 'Q',
+        'K': 'K'
+    };
+
+    return `${rankMap[card[0]]}${card[1]}.svg`
 }

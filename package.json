@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@welldone-software/why-did-you-render": "^4.2.5",
     "axios": "^0.19.2",
     "backbone": "^1.4.0",
     "backbone-associations": "^0.6.2",

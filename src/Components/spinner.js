@@ -8,7 +8,6 @@ Spinner.defaultProps = {
 };
 
 export default function Spinner(props) {
-    console.log('spin');
     const strokeColor = props.useDefaultColor
         ? DEFAULT_COLOR
         : (props.color || 'currentColor');

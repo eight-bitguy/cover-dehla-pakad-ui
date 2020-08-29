@@ -1,4 +1,5 @@
 export default class Url {
+
     static get LandingPage() {
         return '/home';
     }

@@ -1,0 +1,100 @@
+@import "variables";
+
+.board {
+  display: flex;
+  flex-direction: column;
+
+  .board-container {
+
+  }
+
+  .row-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+  }
+
+  .row-2 {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: center;
+    height: 150px;
+  }
+
+  .row-3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+  }
+
+  .bowl {
+    border: 1px solid $primary-color;
+    border-radius: 90px;
+    height: 120px;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .icon {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+    }
+  }
+
+  .card-div {
+    min-height: 100px;
+    min-width: 70px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid $light-primary-color;
+  }
+
+  .player-card-div {
+    .player-name {
+      font-family: $primary-font;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      color: $primary-color;
+    }
+  }
+
+  .-next-chance {
+    .card-div {
+      border: 2px solid $primary-color;
+      border-radius: 10px;
+    }
+  }
+
+  .trump {
+    display: none;
+  }
+
+  .-my-trump {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-family: $primary-font;
+    padding-top: 5px;
+  }
+
+  .-claiming {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-family: $primary-font;
+    padding-top: 5px;
+  }
+
+  .icon-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}

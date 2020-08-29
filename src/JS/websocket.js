@@ -1,10 +1,18 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
+import {store} from "../index";
+import {updateAdditionalInfo, updateNextChance} from "../Redux/modules/additionalInfo";
+import {updateAllStake} from "../Redux/modules/cards";
+import {addRoom} from "../Redux/modules/room";
+import Url from "./url";
+import {replace} from "connected-react-router";
+import {joinNewUsers} from "./helper";
 
 export default class Websocket {
 
     echoClient;
     channelId = null;
+    dispatch;
 
     //ToDo Externalise env variables
     constructor() {
@@ -22,6 +30,8 @@ export default class Websocket {
             },
             forceTLS: true
         });
+
+        this.dispatch = store.dispatch;
     }
 
     async unSubscribe() {
@@ -30,13 +40,36 @@ export default class Websocket {
         }
     }
 
-    async addPrivateChannel(channelId, listeners) {
-        await this.unSubscribe();
+    async addPrivateChannel(channelId) {
+        if (this.channelId === channelId) {
+            return;
+        }
 
-        Object.keys(listeners).forEach((event) => {
-            this.echoClient.private(channelId).listen(event, listeners[event]);
-        });
+        this.echoClient.private(channelId)
+            .listen('BroadcastNewPlayerJoinEvent', this.handleNewPlayerJoinEvent)
+            .listen('BroadcastRoomStartEvent', this.handleStartRoomEvent)
+            .listen('BroadcastNewGameEvent', this.handleNewGameEvent);
 
         this.channelId = channelId;
     }
+
+    handleNewGameEvent = async (e) => {
+        const data = {
+            stake: e.stake,
+            oldStake:e.oldStake
+        };
+        await this.dispatch(updateAdditionalInfo(e));
+        await this.dispatch(updateAllStake(data));
+    };
+
+    handleStartRoomEvent = async (e) => {
+        const room = e.data;
+        await this.dispatch(addRoom(room));
+        const url = Url.GamePage(room.code);
+        this.dispatch(replace(url));
+    };
+
+    handleNewPlayerJoinEvent = async (e) => {
+        await joinNewUsers(e.data);
+    };
 }

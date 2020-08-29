@@ -1,3 +1,4 @@
+// import './JS/wdyr';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import history from './JS/history';
@@ -7,11 +8,17 @@ import {ConnectedRouter} from "connected-react-router";
 import Router from "./JS/router";
 import {addInterceptor} from "./Api/api";
 import reduxStore from "./JS/store";
+import Url from "./JS/url";
 
 export const store = reduxStore;
+
 window.logout = () => {
     window.setToken('');
+    window.setRoomCode('');
+    window.location.href = window.location.host + Url.Login;
 };
+
+window.isDev = () => false;
 
 window.getToken = () => {
     return localStorage.getItem('token');

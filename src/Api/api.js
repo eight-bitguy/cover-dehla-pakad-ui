@@ -16,7 +16,6 @@ export function addInterceptor() {
         function (error) {
             if (error.response.status === 401) {
                 window.logout();
-                window.location.href = window.location.host + Url.Home;
             }
             return error.data ? error.data : error;
         });

@@ -3,15 +3,14 @@ import Page from './page';
 import connect from 'react-redux/es/connect/connect';
 import {getInitialCards, play} from "../Api/game";
 import Cards from "../Components/cards";
-import Card from "../Models/card";
 import { replace } from 'connected-react-router'
-import {isMyChance, myPositionInCurrentRoom, removeCardFromHand} from "../JS/helper";
+import {isMyChance, removeCardFromHand} from "../JS/helper";
 import Url from "../JS/url";
 import MyButton from "../Components/myButton";
-import {addCardsInHand, updateOldStake, updateStake} from "../Redux/modules/cards";
+import {updateAllCards} from "../Redux/modules/cards";
 import {updateNextChance} from "../Redux/modules/additionalInfo";
-import {batch} from "react-redux";
 import Room from "../Models/room";
+import Board from "../Components/board";
 
 class GamePage extends Page {
 
@@ -24,21 +23,31 @@ class GamePage extends Page {
     }
 
     async componentDidMount() {
-        const data = await getInitialCards('601371');
+        if (!window.getRoomCode()) {
+            return;
+        }
+        const data = await getInitialCards(window.getRoomCode());
+
         if (!data) {
             this.props.dispatch(replace(Url.LandingPage));
             return;
         }
-        await batch(async () => {
-            await this.props.dispatch(addCardsInHand(data.initialCards));
-            await this.props.dispatch(updateStake(data.initialStake));
-            await this.props.dispatch(updateOldStake(data.oldStake));
-            await this.props.dispatch(updateNextChance(data.nextChance));
-        });
+
+        const cards = {
+            hand: data.initialCards,
+            oldStake: data.oldStake,
+            stake: data.initialStake,
+        };
+
+        await this.props.dispatch(updateAllCards(cards));
+        await this.props.dispatch(updateNextChance(data.nextChance));
     };
 
-    onClickOnCard = async (cardToPlay) => {
-        this.setState({ cardToPlay });
+    onClickOnCard = async (event) => {
+        const cardToPlay = event.target.dataset.card;
+        if (cardToPlay !== this.state.cardToPlay) {
+            this.setState({ cardToPlay });
+        }
     };
 
     playSelectedCard = async () => {
@@ -56,23 +65,24 @@ class GamePage extends Page {
         this.setState({cardToPlay: null});
     };
 
+    onClick = () => {};
+
     render() {
-        const { cards } = this.props;
-        const { cardToPlay } = this.state;
         const myChance = isMyChance();
         return (
             <div className='game-page-container'>
+                <div className='stake-container'>
+                    {/*<div className='old-stake'>*/}
+                    {/*    <Cards type='oldStake' onClickOnCard={this.onClick}/>*/}
+                    {/*</div>*/}
+                    {/*<div className='stake'>*/}
+                    {/*    <Cards type='stake' onClickOnCard={this.onClick}/>*/}
+                    {/*</div>*/}
+                    <Board/>
+                </div>
                 <div className='hand-stake-container'>
                     <div className='hand-stake'>
-                        <Cards cards={cards.get('hand')} onClickOnCard={this.onClickOnCard} selectedCard={cardToPlay}/>
-                    </div>
-                </div>
-                <div className='stake-container'>
-                    <div className='old-stake'>
-                        <Cards cards={cards.get('oldStake')} onClickOnCard={() => {}}/>
-                    </div>
-                    <div className='stake'>
-                        <Cards cards={cards.get('stake')} onClickOnCard={() => {}}/>
+                        <Cards type='hand' onClickOnCard={this.onClickOnCard} selectedCard={this.state.cardToPlay} />
                     </div>
                 </div>
                 <div className={`play-button ${myChance ? '' : 'display-none'}`}>
@@ -86,10 +96,8 @@ class GamePage extends Page {
     }
 }
 
-function mapStateToProps({cards, roomUsers, room}) {
+function mapStateToProps({room}) {
     return {
-        cards: new Card(cards),
-        roomUsers,
         room: new Room(room)
     };
 }

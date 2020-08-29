@@ -1,6 +1,7 @@
 @import "variables";
 
 .joining-page-container {
+  margin-top: 5vh;
   display: flex;
 
   .joining-page {
@@ -70,5 +71,16 @@
       font-weight: bold;
     }
 
+  }
+
+  .go-back-container {
+    margin-bottom: 5vh;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    .go-back {
+      width: 50%;
+    }
   }
 }

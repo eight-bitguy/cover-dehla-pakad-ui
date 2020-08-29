@@ -1,0 +1,15 @@
+@import "variables";
+
+.about-container {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  font-family: $primary-font;
+  color: $primary-color;
+
+  .name {
+    background-color: $primary-color;
+    text-decoration: none;
+    color: black;
+  }
+}
