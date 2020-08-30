@@ -1,0 +1,47 @@
+@import "variables";
+
+.instruction-container {
+  padding-top: 5vh;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+
+  .instruction {
+    min-width: 215px;
+    padding: 10px;
+    border: 1px solid $primary-color;
+    border-radius: 25px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .description {
+    width: 85%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .row {
+    width: 100%;
+    font-family: $primary-font;
+    color: $primary-color;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .row:first-child {
+    padding-bottom: 10px;
+  }
+
+  .sign {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

@@ -14,6 +14,7 @@ import {startRoom} from "../Api/room";
 import {isAdmin} from "../JS/helper";
 
 import GoBack from "../Components/back";
+import Instructions from "../Components/instructions";
 
 class JoiningPage extends Page {
 
@@ -118,6 +119,7 @@ class JoiningPage extends Page {
                     </div>
                     {this.renderFooter()}
                 </div>
+                <Instructions/>
             </div>
         );
     }
