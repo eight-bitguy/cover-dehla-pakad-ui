@@ -7,6 +7,7 @@ import {addRoom} from "../Redux/modules/room";
 import Url from "./url";
 import {replace} from "connected-react-router";
 import {joinNewUsers} from "./helper";
+import {batch} from "react-redux";
 
 export default class Websocket {
 
@@ -58,8 +59,10 @@ export default class Websocket {
             stake: e.stake,
             oldStake:e.oldStake
         };
-        await this.dispatch(updateAdditionalInfo(e));
-        await this.dispatch(updateAllStake(data));
+        await batch(async () => {
+            this.dispatch(updateAdditionalInfo(e));
+            this.dispatch(updateAllStake(data));
+        });
     };
 
     handleStartRoomEvent = async (e) => {

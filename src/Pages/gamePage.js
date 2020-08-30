@@ -10,7 +10,10 @@ import MyButton from "../Components/myButton";
 import {updateAllCards} from "../Redux/modules/cards";
 import {updateNextChance} from "../Redux/modules/additionalInfo";
 import Room from "../Models/room";
-import Board from "../Components/board";
+import {batch} from "react-redux";
+import PageLoadable from "../Components/loadable";
+
+const Board = PageLoadable({ loader: () => import('../Components/board') });
 
 class GamePage extends Page {
 
@@ -39,8 +42,10 @@ class GamePage extends Page {
             stake: data.initialStake,
         };
 
-        await this.props.dispatch(updateAllCards(cards));
-        await this.props.dispatch(updateNextChance(data.nextChance));
+        await batch(async () => {
+            this.props.dispatch(updateAllCards(cards));
+            this.props.dispatch(updateNextChance(data.nextChance));
+        });
     };
 
     onClickOnCard = async (event) => {

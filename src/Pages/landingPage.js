@@ -7,7 +7,6 @@ import connect from 'react-redux/es/connect/connect';
 import Url from './../JS/url';
 import Room from "../Models/room";
 import LogoutHeader from "../Components/LogoutHeader";
-import About from "../Components/about";
 
 const LandingPage = (props) => {
 

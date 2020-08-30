@@ -95,3 +95,17 @@ code {
 .display-none {
   display: none;
 }
+
+.loading-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .loader-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

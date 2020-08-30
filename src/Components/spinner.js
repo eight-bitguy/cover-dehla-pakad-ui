@@ -1,5 +1,4 @@
 import React from 'react';
-// import './spinner.css';
 
 const DEFAULT_COLOR = '#ff7f02';
 

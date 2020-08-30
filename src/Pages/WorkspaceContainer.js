@@ -10,6 +10,7 @@ import {getMe} from "../Api/user";
 import {addUser} from "../Redux/modules/users";
 import PageLoadable from "../Components/loadable";
 import WebSocket from "../JS/websocket";
+import {batch} from "react-redux";
 
 const GamePage = PageLoadable({ loader: () => import('./gamePage') });
 const JoiningPage = PageLoadable({loader: () => import('./joiningPage')});
@@ -35,8 +36,10 @@ class WorkspaceContainer extends Page {
         const response = await getMe();
 
         if (response && response.data) {
-            this.props.dispatch(addUser([response.data]));
-            this.props.dispatch(updateLoggedInUserId(response.data.id));
+            await batch(async () => {
+                this.props.dispatch(addUser([response.data]));
+                this.props.dispatch(updateLoggedInUserId(response.data.id));
+            });
         }
 
         AppEventEmitter.addListener(AppEvent.addPrivateChannel, this.addPrivateChannel);

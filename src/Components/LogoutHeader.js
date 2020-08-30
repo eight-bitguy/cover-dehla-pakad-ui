@@ -1,5 +1,5 @@
 import React from 'react';
-import LogoutIcon from "../IMAGES/logoutButton";
+import LogoutIcon from "../Icons/logoutButton";
 
 const LogoutHeader = () => {
     return (

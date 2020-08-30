@@ -1,5 +1,5 @@
 import React from 'react';
-import BackIcon from "../IMAGES/backIcon";
+import BackIcon from "../Icons/backIcon";
 import { replace } from 'connected-react-router'
 import connect from 'react-redux/es/connect/connect';
 

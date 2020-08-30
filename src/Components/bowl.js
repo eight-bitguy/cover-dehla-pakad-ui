@@ -1,19 +1,19 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
-import ClubIcon from "../IMAGES/clubsIcon";
-import HeartIcon from "../IMAGES/heartsIcon";
-import DiamondIcon from "../IMAGES/diamondIcon";
-import SpadeIcon from "../IMAGES/spadesIcon";
+import ClubIcon from "../Icons/clubsIcon";
+import HeartIcon from "../Icons/heartsIcon";
+import DiamondIcon from "../Icons/diamondIcon";
+import SpadeIcon from "../Icons/spadesIcon";
 
 const Bowl = (props) => {
 
     const getIcon = () => {
-        const {trump} = props.additionalInfo;
-        if (!trump) {
+        const {trump, trumpFromNextIteration} = props.additionalInfo;
+        if (!trump && !trumpFromNextIteration) {
             return <div/>;
         }
 
-        switch (trump) {
+        switch (trump ?? trumpFromNextIteration) {
             case "H":
                 return <HeartIcon/>;
             case "C":
@@ -21,7 +21,9 @@ const Bowl = (props) => {
             case "D":
                 return <DiamondIcon/>;
             case "S":
-                return <SpadeIcon/>
+                return <SpadeIcon/>;
+            default:
+                return <div />;
         }
     };
 

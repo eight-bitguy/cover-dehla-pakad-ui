@@ -13,14 +13,16 @@ const HomePage = PageLoadable({ loader: () => import("../Pages/homePage") });
 const Router = () => {
     return (
         <div className='router'>
-            <main>
-                <Switch>
-                    <Route exact path={Url.Register} component={Register}/>
-                    <Route exact path={Url.Login} component={Login}/>
-                    <Route exact path={Url.Home} component={HomePage}/>
-                    <PrivateRoute path='/' component={WorkspaceContainer} />
-                </Switch>
-            </main>
+            <div className='router-app'>
+                <main>
+                    <Switch>
+                        <Route exact path={Url.Register} component={Register}/>
+                        <Route exact path={Url.Login} component={Login}/>
+                        <Route exact path={Url.Home} component={HomePage}/>
+                        <PrivateRoute path='/' component={WorkspaceContainer} />
+                    </Switch>
+                </main>
+            </div>
         </div>
     );
 };

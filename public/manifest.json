@@ -1,9 +1,16 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [],
-  "start_url": ".",
+  "short_name": "Dehla Pakad",
+  "name": "Dehla Pakad",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#ff7f02",
+  "background_color": "#ffffff",
+  "prefer_related_applications": false
 }

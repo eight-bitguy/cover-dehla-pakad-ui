@@ -1,10 +1,11 @@
 import React from 'react';
 import {getPlayerNameFromPosition, getPositionCardMapping, mapCardToImage} from "../JS/helper";
-import TrumpIcon from "../IMAGES/trumpIcon";
-import ClaimIcon from "../IMAGES/claimIcon";
+import TrumpIcon from "../Icons/trumpIcon";
+import ClaimIcon from "../Icons/claimIcon";
 import connect from 'react-redux/es/connect/connect';
 
 const CardWrapper = (props) => {
+    let card, position;
     const {
         cards: {
             stake
@@ -15,15 +16,11 @@ const CardWrapper = (props) => {
         displayIndex
     } = JSON.parse(JSON.stringify(props));
 
-    if (!stake.length || !nextChance) {
-        return <div/>
-    }
-
     const mapping = getPositionCardMapping(stake, nextChance);
-    const card=mapping[displayIndex].card, position=mapping[displayIndex].position;
 
-    if (!position && !card) {
-        return <div />;
+    if (Object.keys(mapping).length) {
+        card=mapping[displayIndex].card;
+        position=mapping[displayIndex].position;
     }
 
     return (

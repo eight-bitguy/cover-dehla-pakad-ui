@@ -1,7 +1,9 @@
 import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import CardWrapper from "./cardWrapper";
-import Bowl from "./bowl";
+import PageLoadable from "./loadable";
+
+const Bowl = PageLoadable({ loader: () => import('./bowl') });
 
 const Board = () => {
 

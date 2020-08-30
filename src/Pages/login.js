@@ -41,8 +41,8 @@ const Login = (props) => {
         await window.setToken(userProfile['token']);
 
         await batch(async () => {
-            await props.dispatch(addUser([userProfile]));
-            await props.dispatch(updateLoggedInUserId(userProfile.id));
+            props.dispatch(addUser([userProfile]));
+            props.dispatch(updateLoggedInUserId(userProfile.id));
         });
         setLoading(false);
         props.dispatch(replace(Url.LandingPage));

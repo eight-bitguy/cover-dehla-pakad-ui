@@ -12,6 +12,7 @@ import Users from "../Collections/users";
 import Loader from "../Components/loader";
 import {startRoom} from "../Api/room";
 import {isAdmin} from "../JS/helper";
+
 import GoBack from "../Components/back";
 
 class JoiningPage extends Page {

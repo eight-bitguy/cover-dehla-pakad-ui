@@ -134,8 +134,8 @@ export async function joinNewUsers(users) {
     });
 
     await batch(async () => {
-        await store.dispatch(addUser(users));
-        await store.dispatch(addUsersInRoom(roomUsers));
+        store.dispatch(addUser(users));
+        store.dispatch(addUsersInRoom(roomUsers));
     });
 }
 
@@ -237,25 +237,29 @@ export function arrangePositionAccordingToThePlayer(mapping) {
 
 /**
  *
+ * @type {{A: string, J: string, K: string, Q: string, "2": string, "3": string, "4": string, T: string, "5": string, "6": string, "7": string, "8": string, "9": string}}
+ */
+export const rankMap = {
+    'A': 'A',
+    '2': '2',
+    '3': '3',
+    '4': '4',
+    '5': '5',
+    '6': '6',
+    '7': '7',
+    '8': '8',
+    '9': '9',
+    'T': '10',
+    'J': 'J',
+    'Q': 'Q',
+    'K': 'K'
+};
+
+/**
+ *
  * @param card
  * @returns {string}
  */
 export function mapCardToImage(card) {
-    const rankMap = {
-        'A': 'A',
-        '2': '2',
-        '3': '3',
-        '4': '4',
-        '5': '5',
-        '6': '6',
-        '7': '7',
-        '8': '8',
-        '9': '9',
-        'T': '10',
-        'J': 'J',
-        'Q': 'Q',
-        'K': 'K'
-    };
-
     return `${rankMap[card[0]]}${card[1]}.svg`
 }

@@ -1,4 +1,3 @@
-// import './JS/wdyr';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import history from './JS/history';

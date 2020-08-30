@@ -1,1 +1,1 @@
-.router{background-image:url("./../IMAGES/noise.png");height:100vh;display:flex;flex-direction:column;justify-content:space-between}
+.router{background-image:url("./../IMAGES/noise.png");height:100vh;display:flex;flex-direction:row;justify-content:center;align-items:center}.router-app{height:100vh;width:100%;max-width:600px;display:flex !important;flex-direction:column !important;justify-content:space-between !important}

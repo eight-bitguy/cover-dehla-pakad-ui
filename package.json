@@ -3,15 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@welldone-software/why-did-you-render": "^4.2.5",
     "axios": "^0.19.2",
     "backbone": "^1.4.0",
-    "backbone-associations": "^0.6.2",
-    "cardsJS": "^1.1.1",
     "connected-react-router": "^6.0.0",
     "fbemitter": "^2.1.1",
     "history": "^4.10.1",
     "immutability-helper": "^3.1.1",
+    "jquery": "^3.5.1",
     "laravel-echo": "^1.8.0",
     "node-sass": "^4.14.1",
     "pusher-js": "^6.0.3",
@@ -23,11 +21,10 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
-    "redux-devtools": "^3.5.0",
     "underscore": "^1.10.2"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
+    "redux-devtools": "^3.5.0",
     "onchange": "^7.0.2",
     "parallelshell": "^3.0.2"
   },

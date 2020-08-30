@@ -14,7 +14,9 @@ export default function PageLoading(props) {
             return (
                 <main>
                     <div className='loading-container text-center'>
-                        <Spinner useDefaultColor={true} />
+                        <div className='loader-spinner'>
+                            <Spinner useDefaultColor={true} />
+                        </div>
                     </div>
                 </main>
             );

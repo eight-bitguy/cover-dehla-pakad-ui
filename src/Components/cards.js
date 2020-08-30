@@ -1,13 +1,26 @@
 import React, {useEffect} from 'react';
-import 'cardsJS/dist/cards.min.js';
-import 'cardsJS/dist/cards.min.css';
+import './../JS/cardsJS'
 import connect from 'react-redux/es/connect/connect';
-import {mapCardToImage} from "../JS/helper";
 
+const rankMap = {
+    'A': 'A',
+    '2': '2',
+    '3': '3',
+    '4': '4',
+    '5': '5',
+    '6': '6',
+    '7': '7',
+    '8': '8',
+    '9': '9',
+    'T': '10',
+    'J': 'J',
+    'Q': 'Q',
+    'K': 'K'
+};
 const Cards = (props) => {
 
     useEffect(() => {
-        dispatchEvent(new Event('load'));
+        dispatchEvent(new Event('load-cards'));
     });
 
     const { cards, onClickOnCard, selectedCard } = props;
@@ -24,7 +37,7 @@ const Cards = (props) => {
                     key={`card-par-${index}`}
                     className={`card ${selectedCard === card ? '-is-selected' : ''}`}
                     onClick={onClickOnCard}
-                    src={require(`./../IMAGES/${mapCardToImage(card)}`)}
+                    src={require(`./../IMAGES/${rankMap[card[0]]}${card[1]}.svg`)}
                 />
             )}
         </div>
