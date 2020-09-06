@@ -10,7 +10,7 @@ import LogoutHeader from "../Components/LogoutHeader";
 
 const LandingPage = (props) => {
 
-    const [room, _setRoom] = useState(new Room({'code': '876948'}));
+    const [room, _setRoom] = useState(new Room());
     const [loading, setLoading] = useState(null);
 
     const setRoom = (e) => {

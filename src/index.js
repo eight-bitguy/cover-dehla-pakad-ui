@@ -35,7 +35,7 @@ window.getRoomCode = () => {
     return localStorage.getItem('room-code');
 };
 
-window.apiUrl = () => `http://${window.location.hostname}:8000`;
+window.apiUrl = () => `http://${window.location.hostname}`;
 
 addInterceptor();
 ReactDOM.render(
