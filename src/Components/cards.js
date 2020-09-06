@@ -46,9 +46,14 @@ const Cards = (props) => {
 
 };
 
-function mapStateToProps({cards}, {type}) {
+function mapStateToProps({cards}, {primaryType, secondaryType}) {
+    let cardsToDisplay = cards[primaryType];
+    if (!cardsToDisplay || cardsToDisplay.length === 0) {
+        cardsToDisplay = (secondaryType && cards[secondaryType]) ? cards[secondaryType] : [];
+    }
+
     return {
-        cards: cards[type]
+        cards: cardsToDisplay
     };
 }
 

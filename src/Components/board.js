@@ -1,5 +1,4 @@
 import React from 'react';
-import connect from 'react-redux/es/connect/connect';
 import CardWrapper from "./cardWrapper";
 import PageLoadable from "./loadable";
 
@@ -26,4 +25,4 @@ const Board = () => {
     );
 };
 
-export default connect()(Board);
+export default Board;

@@ -10,7 +10,8 @@ import LogoutHeader from "../Components/LogoutHeader";
 
 const LandingPage = (props) => {
 
-    const [room, _setRoom] = useState(new Room({'code': '356226'}));
+    const [room, _setRoom] = useState(new Room({'code': '876948'}));
+    const [loading, setLoading] = useState(null);
 
     const setRoom = (e) => {
         room.set(e.target.name, e.target.value);
@@ -18,12 +19,22 @@ const LandingPage = (props) => {
     };
 
     const createNewRoom = async () => {
+        if (loading) {
+            return ;
+        }
+        setLoading('create');
         await room.createNewRoom();
+        setLoading(null);
         props.dispatch(replace(Url.JoiningGame(room.get('code'))));
     };
 
     const joinRoom = async () => {
+        if (loading) {
+            return ;
+        }
+        setLoading('join');
         const canJoin = await room.joinRoom();
+        setLoading(null);
         if (canJoin) {
             props.dispatch(replace(Url.JoiningGame(room.get('code'))));
         }
@@ -46,6 +57,7 @@ const LandingPage = (props) => {
                         <MyButton
                             label='Join Room'
                             onClick={joinRoom}
+                            loading={loading==='join'}
                         />
                     </div>
                 </div>
@@ -54,6 +66,7 @@ const LandingPage = (props) => {
                     <MyButton
                         label='Create Room'
                         onClick={createNewRoom}
+                        loading={loading==='create'}
                     />
                 </div>
             </div>

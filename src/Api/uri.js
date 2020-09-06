@@ -36,6 +36,10 @@ export default class Uri {
         return `${Uri.prefix}/room/${roomCode}/users`;
     };
 
+    static getScores = (roomCode) => {
+        return `${Uri.prefix}/room/${roomCode}/scores`;
+    };
+
     static initialCards = (roomCode) => {
         return `${Uri.prefix}/room/${roomCode}/user/initial-cards`;
     };

@@ -3,49 +3,97 @@ import {getPlayerNameFromPosition, getPositionCardMapping, mapCardToImage} from 
 import TrumpIcon from "../Icons/trumpIcon";
 import ClaimIcon from "../Icons/claimIcon";
 import connect from 'react-redux/es/connect/connect';
+import {updateFlashCard} from "../Redux/modules/uiParams";
+import { push } from 'connected-react-router'
+import Room from "../Models/room";
+import Url from "../JS/url";
+
+const ShowIcon = ({toShow, Icon}) => {
+    let toRender = toShow ?
+        <div className='-my-trump'>{Icon}</div> :
+        <div className='empty-div' />;
+
+    return (
+        <div className='icon-row'>
+            {toRender}
+        </div>
+    );
+};
+
+const getMapping = (props) => {
+    const {
+        stake, oldStake, nextChance, oldStakeFirstChance, flashCard, roomStatus
+    } = props;
+
+    let mapping = getPositionCardMapping(stake, nextChance);
+    if (stake && stake.length === 0 && flashCard) {
+        return getPositionCardMapping(oldStake, oldStakeFirstChance);
+    }
+
+    if (roomStatus === Room.STATUS_INACTIVE) {
+        props.dispatch(push(Url.GameOver(window.getRoomCode())))
+    }
+
+    return mapping;
+};
+
+const canCardFlash = (props, position) => {
+    const {
+        oldStake, flashCard, nextChance
+    } = props;
+
+    if (oldStake && (oldStake.length === 4) && flashCard && (nextChance === position)) {
+        setTimeout(() => {
+            props.dispatch(updateFlashCard(false));
+        }, 3000);
+
+        return true;
+    }
+    return false;
+};
 
 const CardWrapper = (props) => {
     let card, position;
-    const {
-        cards: {
-            stake
-        },
-        additionalInfo: {
-            nextChance, claimingBy, trumpDecidedBy
-        },
-        displayIndex
-    } = JSON.parse(JSON.stringify(props));
 
-    const mapping = getPositionCardMapping(stake, nextChance);
+    const {
+        nextChance, claimingBy, trumpDecidedBy, displayIndex
+    } = props;
+
+    const mapping = getMapping(props);
 
     if (Object.keys(mapping).length) {
         card=mapping[displayIndex].card;
         position=mapping[displayIndex].position;
     }
+    const canFlash = canCardFlash(props, position);
 
     return (
         <div className={`player-card-div ${nextChance === position ? '-next-chance' : ''}`}>
-            <div className='player-name'>{getPlayerNameFromPosition(position)}</div>
-            <div className='card-div'>
-                {card && <img className='card' src={require(`./../IMAGES/${mapCardToImage(card)}`)} />}
-            </div>
-            <div className='icon-row'>
-                <div className={`trump ${trumpDecidedBy === position ? '-my-trump' : ''}`}>
-                    <TrumpIcon />
+            <div className={`card-and-sign-div ${displayIndex === 3 ? '-rev' : ''}`}>
+                <ShowIcon toShow={claimingBy === position} Icon={<ClaimIcon/>}/>
+                <div className='card-and-name-div'>
+                    <div className={`player-name ${canFlash ? '-flash' : ''}`}>
+                        {getPlayerNameFromPosition(position)}
+                    </div>
+                    <div className='card-div'>
+                        {card && <img className='card' src={require(`./../IMAGES/${mapCardToImage(card)}`)} />}
+                    </div>
                 </div>
-                <div className={`trump ${claimingBy === position ? '-claiming' : ''}`}>
-                    <ClaimIcon />
-                </div>
+                <ShowIcon toShow={trumpDecidedBy === position} Icon={<TrumpIcon/>}/>
             </div>
         </div>
     );
 };
 
-function mapStateToProps({additionalInfo, cards, roomUsers}) {
+function mapStateToProps(props) {
+    const {
+        roomUsers, cards: {stake, oldStake},
+        additionalInfo: {nextChance, claimingBy, trumpDecidedBy, oldStakeFirstChance, roomStatus},
+        uiParams: { flashCard },
+    } = props;
+
     return {
-        additionalInfo,
-        cards,
-        roomUsers
+        flashCard, nextChance, claimingBy, trumpDecidedBy, oldStakeFirstChance, stake, oldStake, roomUsers, roomStatus
     };
 }
 

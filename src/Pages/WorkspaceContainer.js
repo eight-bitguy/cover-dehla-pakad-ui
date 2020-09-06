@@ -12,6 +12,7 @@ import PageLoadable from "../Components/loadable";
 import WebSocket from "../JS/websocket";
 import {batch} from "react-redux";
 
+const GameOverPage = PageLoadable({ loader: () => import("../Pages/gameOverPage") });
 const GamePage = PageLoadable({ loader: () => import('./gamePage') });
 const JoiningPage = PageLoadable({loader: () => import('./joiningPage')});
 const LandingPage = PageLoadable({loader: () => import('./landingPage')});
@@ -61,6 +62,7 @@ class WorkspaceContainer extends Page {
                 <Route exact path={Url.GamePage()} component={GamePage} />
                 <Route exact path={Url.LandingPage} component={LandingPage} />
                 <Route path={Url.JoiningGame()} component={JoiningPage} />
+                <Route exact path={Url.GameOver()} component={GameOverPage}/>
             </Switch>
         );
     }

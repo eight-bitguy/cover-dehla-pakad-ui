@@ -8,6 +8,7 @@ import Url from "./url";
 import {replace} from "connected-react-router";
 import {joinNewUsers} from "./helper";
 import {batch} from "react-redux";
+import {updateFlashCard} from "../Redux/modules/uiParams";
 
 export default class Websocket {
 
@@ -62,6 +63,9 @@ export default class Websocket {
         await batch(async () => {
             this.dispatch(updateAdditionalInfo(e));
             this.dispatch(updateAllStake(data));
+            if (data.oldStake && data.oldStake.length===4) {
+                this.dispatch(updateFlashCard(true));
+            }
         });
     };
 

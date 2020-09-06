@@ -14,7 +14,7 @@ export function addInterceptor() {
             return response.data ? response.data : response;
         },
         function (error) {
-            if (error.response.status === 401) {
+            if (!error || !error.response || error.response.status === 401) {
                 window.logout();
             }
             return error.data ? error.data : error;

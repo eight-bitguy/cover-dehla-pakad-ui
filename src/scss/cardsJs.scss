@@ -1,5 +1,7 @@
+@import "variables";
+
 img.card {
-  width: 70px;
+  width: $card-height;
   margin: 0;
   padding: 0;
   border: 0;
@@ -101,5 +103,5 @@ img.card {
 }
 .fan img.card {
   position: absolute;
-  width: 90px;
+  width: $card-height;
 }

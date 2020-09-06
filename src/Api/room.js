@@ -16,3 +16,7 @@ export async function startRoom(roomCode) {
 export async function getJoinedUses(roomCode) {
     return await get(Uri.getJoinedUsers(roomCode));
 }
+
+export async function getScores(roomCode) {
+    return await get(Uri.getScores(roomCode));
+}

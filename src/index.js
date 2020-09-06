@@ -14,7 +14,7 @@ export const store = reduxStore;
 window.logout = () => {
     window.setToken('');
     window.setRoomCode('');
-    window.location.href = window.location.host + Url.Login;
+    window.location.replace(window.location.host + Url.Login);
 };
 
 window.isDev = () => false;

@@ -173,15 +173,16 @@ export async function joinRoomWithRoomCode(roomCode) {
  * @returns {{}}
  */
 export function getPositionCardMapping(stake, nextChance) {
+    const stakeCopy = JSON.parse(JSON.stringify(stake));
     const mapping = {};
     let positionToCheck = nextChance;
 
-    if (!stake || !nextChance) {
+    if (!stakeCopy || !nextChance) {
         return mapping;
     }
 
-    stake.reverse();
-    stake.forEach((card) => {
+    stakeCopy.reverse();
+    stakeCopy.forEach((card) => {
         positionToCheck = getPreviousPosition(positionToCheck);
         mapping[positionToCheck] = card;
     });

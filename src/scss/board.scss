@@ -13,7 +13,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px;
+    height: 120px;
   }
 
   .row-2 {
@@ -21,21 +21,21 @@
     justify-content: space-around;
     flex-direction: row;
     align-items: center;
-    height: 150px;
+    height: 120px;
   }
 
   .row-3 {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px;
+    height: 120px;
   }
 
   .bowl {
     border: 1px solid $primary-color;
     border-radius: 90px;
-    height: 100px;
-    width: 100px;
+    height: 70px;
+    width: 70px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -49,11 +49,12 @@
   }
 
   .card-div {
-    min-height: 100px;
-    min-width: 70px;
+    min-height: 84px;
+    min-width: $card-height;
     display: flex;
     justify-content: center;
-    border: 2px solid $light-primary-color;
+    border-radius: 3px;
+    border: 1px solid $light-primary-color;
   }
 
   .player-card-div {
@@ -64,17 +65,22 @@
       justify-content: center;
       color: $primary-color;
     }
+
+    .-flash {
+      border-radius: 10px;
+      animation: blackWhite 0.4s infinite;
+    }
   }
 
   .-next-chance {
     .card-div {
-      border: 2px solid $primary-color;
-      border-radius: 10px;
+      border: 1px solid $primary-color;
+
     }
   }
 
-  .trump {
-    display: none;
+  .empty-div {
+    width: 28px;
   }
 
   .-my-trump {
@@ -82,7 +88,7 @@
     justify-content: center;
     font-weight: bold;
     font-family: $primary-font;
-    padding-top: 5px;
+    padding: 2px;
   }
 
   .-claiming {
@@ -95,7 +101,17 @@
 
   .icon-row {
     display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .card-and-sign-div {
+    display: flex;
     flex-direction: row;
-    justify-content: center;
+  }
+
+  .card-and-name-div {
+    display: flex;
+    flex-direction: column;
   }
 }

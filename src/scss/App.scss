@@ -70,7 +70,22 @@ code {
   100% { transform: rotate(360deg); }
 }
 
+@-webkit-keyframes blackWhite {
+  0% { background-color: $primary-color; color: inherit }
+  50% { background-color: $primary-color; color: inherit }
+  51% { background-color: inherit; color: $primary-color }
+  100% { background-color: inherit; color: $primary-color }
+}
+
+@keyframes blackWhite {
+  0% { background-color: $primary-color; color: inherit }
+  50% { background-color: $primary-color; color: inherit }
+  51% { background-color: inherit; color: $primary-color }
+  100% { background-color: inherit; color: $primary-color }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
 
 .card {
   margin: 2px;

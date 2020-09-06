@@ -8,10 +8,11 @@ import {isMyChance, removeCardFromHand} from "../JS/helper";
 import Url from "../JS/url";
 import MyButton from "../Components/myButton";
 import {updateAllCards} from "../Redux/modules/cards";
-import {updateNextChance} from "../Redux/modules/additionalInfo";
-import Room from "../Models/room";
+import {updateNextChance, updateOldStakeFirstChance} from "../Redux/modules/additionalInfo";
 import {batch} from "react-redux";
+import memoizeOne from 'memoize-one';
 import PageLoadable from "../Components/loadable";
+import {updateFlashCard} from "../Redux/modules/uiParams";
 
 const Board = PageLoadable({ loader: () => import('../Components/board') });
 
@@ -45,6 +46,10 @@ class GamePage extends Page {
         await batch(async () => {
             this.props.dispatch(updateAllCards(cards));
             this.props.dispatch(updateNextChance(data.nextChance));
+            this.props.dispatch(updateOldStakeFirstChance(data.oldStakeFirstChance));
+            if (cards.oldStake && cards.oldStake.length===4) {
+                this.props.dispatch(updateFlashCard(true));
+            }
         });
     };
 
@@ -65,7 +70,7 @@ class GamePage extends Page {
         removeCardFromHand(cardToPlay);
         const {room} = this.props;
         const data = { card: cardToPlay };
-        await play(room.get('code'), data);
+        await play(room.code, data);
 
         this.setState({cardToPlay: null});
     };
@@ -77,17 +82,15 @@ class GamePage extends Page {
         return (
             <div className='game-page-container'>
                 <div className='stake-container'>
-                    {/*<div className='old-stake'>*/}
-                    {/*    <Cards type='oldStake' onClickOnCard={this.onClick}/>*/}
-                    {/*</div>*/}
-                    {/*<div className='stake'>*/}
-                    {/*    <Cards type='stake' onClickOnCard={this.onClick}/>*/}
-                    {/*</div>*/}
                     <Board/>
                 </div>
                 <div className='hand-stake-container'>
                     <div className='hand-stake'>
-                        <Cards type='hand' onClickOnCard={this.onClickOnCard} selectedCard={this.state.cardToPlay} />
+                        <Cards
+                            primaryType='hand'
+                            onClickOnCard={this.onClickOnCard}
+                            selectedCard={this.state.cardToPlay}
+                        />
                     </div>
                 </div>
                 <div className={`play-button ${myChance ? '' : 'display-none'}`}>
@@ -101,10 +104,13 @@ class GamePage extends Page {
     }
 }
 
-function mapStateToProps({room}) {
+function mapStateToProps({room, additionalInfo}) {
     return {
-        room: new Room(room)
+        room,
+        additionalInfo
     };
 }
 
-export default connect(mapStateToProps)(GamePage)
+const smartMapper = memoizeOne(mapStateToProps);
+
+export default connect(smartMapper)(GamePage)

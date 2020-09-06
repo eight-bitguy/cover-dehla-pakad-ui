@@ -23,8 +23,8 @@ var cardsScript = document.currentScript;
 
     var module = {
         options: {
-            spacing: 0.20,  // How much to show between cards, expressed as percentage of textureWidth
-            radius: 400,    // This is the radius of the circle under the fan of cards and thus controls the overall curvature of the fan. Small values means higher curvature
+            spacing: 0.25,  // How much to show between cards, expressed as percentage of textureWidth
+            radius: 500,    // This is the radius of the circle under the fan of cards and thus controls the overall curvature of the fan. Small values means higher curvature
             flow: 'horizontal', // The layout direction (horizontal or vertical)
             fanDirection: "N",
             imagesUrl: 'cards/' // The base URL for the card images, should end with a '/'.

@@ -1,0 +1,33 @@
+@import "variables";
+
+.game-over-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+
+  .game-over {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text {
+    font-family: $secondary-font;
+    color: $primary-color;
+    font-size: 50px;
+    font-weight: bold;
+  }
+
+  .score-board-div {
+    width: 100%;
+  }
+
+  .back-icon {
+    margin-top: 5vh;
+    display: flex;
+    justify-content: center;
+  }
+}

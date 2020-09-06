@@ -23,4 +23,8 @@ export default class Url {
     static get Home() {
         return '/';
     }
+
+    static GameOver(roomCode) {
+        return `/game/${roomCode ? roomCode : ':roomCode'}/over`;
+    }
 }

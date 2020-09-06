@@ -21,7 +21,7 @@ const HomePage = (props) => {
     return (
         <div className='home-page'>
             <div className='options'>
-                <Cards type='display' onClickOnCard={onClick}/>
+                <Cards primaryType='display' onClickOnCard={onClick}/>
                 <div className='text-div'>
                     <span className='line-1'>Welcome to</span>
                     <span className='line-2'>Dehla Pakad</span>

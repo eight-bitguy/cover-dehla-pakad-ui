@@ -13,7 +13,7 @@ import Error from "../Components/error";
 import GoBack from "../Components/back";
 
 const Login = (props) => {
-    const [user, _setUser] = useState(new User());
+    const [user, _setUser] = useState(new User({email: 'raj@dp.com', password: 11111111}));
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 

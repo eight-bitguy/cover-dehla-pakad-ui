@@ -4,6 +4,7 @@ import {createRoom, joinRoom} from "../Api/room";
 export default class Room extends BaseModel {
 
     static STATUS_ACTIVE = 'active';
+    static STATUS_INACTIVE = 'inactive';
     static POSITION_A1 = 'a1';
     static POSITION_B1 = 'b1';
     static POSITION_A2 = 'a2';
