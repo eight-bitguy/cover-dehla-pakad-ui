@@ -92,7 +92,7 @@ const CardWrapper = (props) => {
                         {getPlayerNameFromPosition(position)}
                     </div>
                     <div className='card-div'>
-                        {card && <img className='card' src={require(`./../IMAGES/${rankMap[card[0]]}${card[1]}.svg`)} />}
+                        {card && <img className='card' src={require(`./../IMAGES/${rank[card[0]]}${card[1]}.svg`)} />}
                     </div>
                 </div>
                 <ShowIcon toShow={trumpDecidedBy === position} Icon={<TrumpIcon/>}/>
