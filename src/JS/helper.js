@@ -211,7 +211,8 @@ export function getPlayerNameFromPosition(position) {
     if (!roomUsers.length) {
         return '';
     }
-    return roomUsers.find(user => user.position === position).name;
+    const user = roomUsers.find(user => user.position === position);
+    return user ? user.name : '';
 }
 
 /**
