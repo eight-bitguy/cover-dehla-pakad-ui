@@ -10,7 +10,7 @@ export function addRoom(data) {
     };
 }
 
-export function updateRoomStatus(state) {
+export function updateRoomStatus(status) {
     return {
         type: UPDATE_STATUS,
         data: status
@@ -26,7 +26,7 @@ export default function room(state = initialState, action) {
             return action.data;
 
         case UPDATE_STATUS:
-            return update(status, {status: {$set: action.data}});
+            return update(state, {status: {$set: action.status}});
 
         default:
             return state;
