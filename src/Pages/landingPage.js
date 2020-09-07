@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { replace } from 'connected-react-router'
 import MyInput from "../Components/myInput";
 import MyButton from "../Components/myButton";
@@ -9,6 +9,10 @@ import Room from "../Models/room";
 import LogoutHeader from "../Components/LogoutHeader";
 
 const LandingPage = (props) => {
+
+    useEffect(() => {
+        window.setRoomCode('');
+    }, []);
 
     const [room, _setRoom] = useState(new Room());
     const [loading, setLoading] = useState(null);
@@ -25,6 +29,7 @@ const LandingPage = (props) => {
         setLoading('create');
         await room.createNewRoom();
         setLoading(null);
+        window.setRoomCode(room.get('code'));
         props.dispatch(replace(Url.JoiningGame(room.get('code'))));
     };
 
@@ -36,6 +41,7 @@ const LandingPage = (props) => {
         const canJoin = await room.joinRoom();
         setLoading(null);
         if (canJoin) {
+            window.setRoomCode(room.get('code'));
             props.dispatch(replace(Url.JoiningGame(room.get('code'))));
         }
     };

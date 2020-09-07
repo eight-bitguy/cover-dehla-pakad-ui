@@ -1,14 +1,15 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {store} from "../index";
-import {updateAdditionalInfo, updateNextChance} from "../Redux/modules/additionalInfo";
+import {updateAdditionalInfo} from "../Redux/modules/additionalInfo";
 import {updateAllStake} from "../Redux/modules/cards";
-import {addRoom} from "../Redux/modules/room";
+import {updateRoomStatus} from "../Redux/modules/room";
 import Url from "./url";
 import {replace} from "connected-react-router";
 import {joinNewUsers} from "./helper";
 import {batch} from "react-redux";
 import {updateFlashCard} from "../Redux/modules/uiParams";
+import Room from "../Models/room";
 
 export default class Websocket {
 
@@ -70,9 +71,10 @@ export default class Websocket {
     };
 
     handleStartRoomEvent = async (e) => {
-        const room = e.data;
-        await this.dispatch(addRoom(room));
-        const url = Url.GamePage(room.code);
+        await this.dispatch(updateRoomStatus(Room.STATUS_ACTIVE));
+        await joinNewUsers(e.data);
+
+        const url = Url.GamePage(window.getRoomCode());
         this.dispatch(replace(url));
     };
 

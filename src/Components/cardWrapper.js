@@ -1,5 +1,5 @@
 import React from 'react';
-import {getPlayerNameFromPosition, getPositionCardMapping, rankMap} from "../JS/helper";
+import {getPlayerNameFromPosition, getPositionCardMapping} from "../JS/helper";
 import TrumpIcon from "../Icons/trumpIcon";
 import ClaimIcon from "../Icons/claimIcon";
 import connect from 'react-redux/es/connect/connect';
