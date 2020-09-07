@@ -1,5 +1,5 @@
 import React from 'react';
-import {getPlayerNameFromPosition, getPositionCardMapping, mapCardToImage} from "../JS/helper";
+import {getPlayerNameFromPosition, getPositionCardMapping, rankMap} from "../JS/helper";
 import TrumpIcon from "../Icons/trumpIcon";
 import ClaimIcon from "../Icons/claimIcon";
 import connect from 'react-redux/es/connect/connect';
@@ -7,6 +7,22 @@ import {updateFlashCard} from "../Redux/modules/uiParams";
 import { push } from 'connected-react-router'
 import Room from "../Models/room";
 import Url from "../JS/url";
+
+const rank = {
+    'A': 'A',
+    '2': '2',
+    '3': '3',
+    '4': '4',
+    '5': '5',
+    '6': '6',
+    '7': '7',
+    '8': '8',
+    '9': '9',
+    'T': '10',
+    'J': 'J',
+    'Q': 'Q',
+    'K': 'K'
+};
 
 const ShowIcon = ({toShow, Icon}) => {
     let toRender = toShow ?
@@ -76,7 +92,7 @@ const CardWrapper = (props) => {
                         {getPlayerNameFromPosition(position)}
                     </div>
                     <div className='card-div'>
-                        {card && <img className='card' src={require(`./../IMAGES/${mapCardToImage(card)}`)} />}
+                        {card && <img className='card' src={require(`./../IMAGES/${rankMap[card[0]]}${card[1]}.svg`)} />}
                     </div>
                 </div>
                 <ShowIcon toShow={trumpDecidedBy === position} Icon={<TrumpIcon/>}/>
