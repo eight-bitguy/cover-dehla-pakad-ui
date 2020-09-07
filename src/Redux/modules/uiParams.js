@@ -10,7 +10,7 @@ export function updateFlashCard(data) {
 }
 
 const initialState = {
-    flashCard: true
+    flashCard: false
 };
 
 export default function uiParams(state = initialState, action) {

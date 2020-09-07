@@ -31,7 +31,7 @@ const getMapping = (props) => {
     }
 
     if (roomStatus === Room.STATUS_INACTIVE) {
-        props.dispatch(push(Url.GameOver(window.getRoomCode())))
+        props.dispatch(push(Url.GameOver(window.getRoomCode())));
     }
 
     return mapping;
