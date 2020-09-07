@@ -8,6 +8,7 @@ import {addRoom} from "../Redux/modules/room";
 import RoomUsers from "../Collections/roomUsers";
 import Users from "../Collections/users";
 import {joinRoom} from "../Api/room";
+import {addAlreadyJoinedUsers} from "../JS/helper";
 
 import GoBack from "../Components/back";
 import Instructions from "../Components/instructions";
@@ -24,7 +25,7 @@ class JoiningPage extends Page {
 
     async componentDidMount() {
         const response = await joinRoom(this.roomCode);
-
+        await addAlreadyJoinedUsers(this.roomCode);
         if (response && !!response.data) {
             this.props.dispatch(addRoom(response.data));
             await AppEventEmitter.emit(AppEvent.addPrivateChannel, this.roomCode);
