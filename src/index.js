@@ -18,7 +18,6 @@ window.logout = () => {
 };
 
 window.isDev = () => false;
-
 window.getToken = () => {
     return localStorage.getItem('token');
 };

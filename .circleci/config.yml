@@ -26,10 +26,10 @@ jobs:
       - gcp-gke/install
       - gcp-gke/init
       - gcp-gke/rollout-image:
-          cluster: eightbitguy-website-cluster-1
-          container: dehla-pakad-ui
-          deployment: eightbitguy.in
-          image: gcr.io/dehla-pakad/dehla-pakad-ui-${CIRCLE_BRANCH}-$(echo $CIRCLE_SHA1 | cut -c -7)
+          cluster: eightbitguy
+          container: ui-container
+          deployment: ui-app-deployment
+          image: gcr.io/my-cluster-290007/dehla-pakad-api-${CIRCLE_BRANCH}-$(echo $CIRCLE_SHA1 | cut -c -7)
 
 
 workflows:
@@ -37,6 +37,6 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-#      - push:
-#          requires:
-#            - build
+      - push:
+          requires:
+            - build
