@@ -29,7 +29,7 @@ jobs:
           cluster: eightbitguy
           container: ui-container
           deployment: ui-app-deployment
-          image: gcr.io/my-cluster-290007/dehla-pakad-api-${CIRCLE_BRANCH}-$(echo $CIRCLE_SHA1 | cut -c -7)
+          image: gcr.io/my-cluster-290007/dehla-pakad-ui-${CIRCLE_BRANCH}-$(echo $CIRCLE_SHA1 | cut -c -7)
 
 
 workflows:
