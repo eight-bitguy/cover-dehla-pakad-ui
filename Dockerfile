@@ -16,7 +16,7 @@ RUN apk add --no-cache bash
 
 COPY --from=checkpoint /app/build/ /usr/share/nginx/html
 
-COPY --from=checkpoint /app/Docker/bin/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=checkpoint /app/Docker/bin/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=checkpoint /app/Docker/env.sh /usr/share/nginx/html
 
