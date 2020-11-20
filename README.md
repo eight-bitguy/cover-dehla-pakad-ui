@@ -1,68 +1,31 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is written by [Sandal Jain](https://www.linkedin.com/in/eightbitguy/) which is a slightly tweeked version of typical dehla-pakad game.
 
-## Available Scripts
+## Motivation
+The sole motivation for writing this game was to learn how to deploy an app to Production and build a CI-CD pipeline for the same. <br><br> 
+After testing this game with some of my friends, it came out to be an interesting game which was played over the internet at the time of COVID Lockdown.<br><br>
+While developing this game, I also paid a good amount of attention in designing its UI so that it does not feel like a hobby project.
 
-In the project directory, you can run:
+##Tools used
+I have achieved my target of building a CI-CD pipeline by using<br><br> 
+**Docker**: to containerize my app
+**Circle-ci** to build by app's Image
+**Google container repository** to keep my build images
+**GKE** to deploy my app
 
-### `yarn start`
+The backend of this app is developed in **Laravel** and UI uses **React** and **Redux**.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##Build this app
+To repo contains UI, you'll also need its [API](https://github.com/eight-bitguy/cover-dehla-pakad-api) part.
+Just fire `docker-compose up` to start the app, it will download and build everything by its own
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+##Future plans
+I also plan to publish my app on play-store and app-store after writing a react native web-view wrapper for it.
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+##ScreenShots
+Here are some screenshots.
+![image](https://user-images.githubusercontent.com/32420694/99808305-a9c74700-2b66-11eb-8126-b37a20538bd8.png)
+![image](https://user-images.githubusercontent.com/32420694/99808302-a92eb080-2b66-11eb-8fd7-1c630f5d1b56.png)
+![image](https://user-images.githubusercontent.com/32420694/99808292-a6cc5680-2b66-11eb-8f24-6acee4dd6fe5.png)
+![image](https://user-images.githubusercontent.com/32420694/99808288-a469fc80-2b66-11eb-9b3c-e27790754e49.png)
+![image](https://user-images.githubusercontent.com/32420694/99808270-9fa54880-2b66-11eb-86f7-4df93fa40945.png)
+![image](https://user-images.githubusercontent.com/32420694/99808282-a2a03900-2b66-11eb-93bb-d832330b09db.png)
