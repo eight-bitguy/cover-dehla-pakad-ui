@@ -5,23 +5,23 @@ The sole motivation for writing this game was to learn how to deploy an app to P
 After testing this game with some of my friends, it came out to be an interesting game which was played over the internet at the time of COVID Lockdown.<br><br>
 While developing this game, I also paid a good amount of attention in designing its UI so that it does not feel like a hobby project.
 
-##Tools used
+## Tools used
 I have achieved my target of building a CI-CD pipeline by using<br><br> 
-**Docker**: to containerize my app
-**Circle-ci** to build by app's Image
-**Google container repository** to keep my build images
-**GKE** to deploy my app
+**Docker**: to containerize my app<br> 
+**Circle-ci** to build by app's Image<br> 
+**Google container repository** to keep my build images<br> 
+**Google Kubernetes engine** to deploy my app<br><br> 
 
 The backend of this app is developed in **Laravel** and UI uses **React** and **Redux**.
 
-##Build this app
+## Build this app
 To repo contains UI, you'll also need its [API](https://github.com/eight-bitguy/cover-dehla-pakad-api) part.
 Just fire `docker-compose up` to start the app, it will download and build everything by its own
 
-##Future plans
+## Future plans
 I also plan to publish my app on play-store and app-store after writing a react native web-view wrapper for it.
 
-##ScreenShots
+## ScreenShots
 Here are some screenshots.
 ![image](https://user-images.githubusercontent.com/32420694/99808305-a9c74700-2b66-11eb-8126-b37a20538bd8.png)
 ![image](https://user-images.githubusercontent.com/32420694/99808302-a92eb080-2b66-11eb-8fd7-1c630f5d1b56.png)
