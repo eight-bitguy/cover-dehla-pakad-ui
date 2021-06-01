@@ -8,14 +8,13 @@ import About from "../Components/about";
 
 const HomePage = (props) => {
 
-
     const onLogin = () => {
         props.dispatch(replace(Url.Login));
     };
 
-    const onRegister = () => {
-        props.dispatch(replace(Url.Register));
-    };
+    // const onRegister = () => {
+    //     props.dispatch(replace(Url.Register));
+    // };
 
     const onClick = () => {};
 
@@ -30,7 +29,7 @@ const HomePage = (props) => {
                 </div>
                 <div className='button-div'>
                     <MyButton label='Login' onClick={onLogin}/>
-                    <MyButton label='Register' onClick={onRegister}/>
+                    {/*<MyButton label='Register' onClick={onRegister}/>*/}
                 </div>
             </div>
             <About/>

@@ -35,6 +35,7 @@
 .-disabled {
   .my-button {
     color: $light-primary-color !important;
+    border: 1px solid $light-primary-color !important;
   }
 
   .my-button:active {

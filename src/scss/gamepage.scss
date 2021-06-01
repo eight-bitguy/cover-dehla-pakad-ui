@@ -4,10 +4,6 @@
   justify-content: center;
 }
 
-.hand-container {
-  //position: absolute;
-}
-
 .game-page-container {
   display: flex;
   flex-direction: column;
@@ -27,7 +23,13 @@
   }
 
   .play-button {
+    display: flex;
+    flex-direction: row;
     margin-top: 2vh;
+
+    .my-button {
+      width: 80%;
+    }
   }
 
   .hand-stake-container {

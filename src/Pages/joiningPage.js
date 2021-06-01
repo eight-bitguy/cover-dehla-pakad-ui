@@ -31,8 +31,7 @@ class JoiningPage extends Page {
             await AppEventEmitter.emit(AppEvent.addPrivateChannel, this.roomCode);
             return;
         }
-
-        this.props.dispatch(replace(Url.LandingPage))
+        this.props.dispatch(replace(Url.LandingPage));
     }
 
     render() {

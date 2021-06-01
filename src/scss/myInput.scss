@@ -1,6 +1,9 @@
 @import "variables";
 
 .my-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   margin-bottom: 15px;
 
@@ -16,6 +19,7 @@
     font-family: $primary-font;
     color: $primary-color;
     font-size: 30px;
+    padding: 0;
   }
 
   .label {

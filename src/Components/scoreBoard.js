@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import connect from 'react-redux/es/connect/connect';
 import {getScores} from "../Api/room";
+import GoBack from "./back";
+import Url from "../JS/url";
 
 const ScoreBoard = (props) => {
     const {roomCode} = props;
@@ -8,6 +10,10 @@ const ScoreBoard = (props) => {
 
     useEffect(() => {
         (async () => {
+            if (props.initialScores) {
+                setScores(props.initialScores);
+                return ;
+            }
             const response = await getScores(roomCode);
             setScores(response);
         })()

@@ -20,6 +20,10 @@ export default class Uri {
         return `${Uri.prefix}/login`;
     }
 
+    static get guestLogin() {
+        return `${Uri.prefix}/guest-login`;
+    }
+
     static get creatRoom() {
         return `${Uri.prefix}/room`;
     }

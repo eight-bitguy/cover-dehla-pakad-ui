@@ -75,7 +75,10 @@ class GamePage extends Page {
         this.setState({cardToPlay: null});
     };
 
-    onClick = () => {};
+    displayStats = () => {
+        console.log(this.props);
+        this.props.dispatch(replace(Url.Stats));
+    };
 
     render() {
         const myChance = isMyChance();
@@ -93,11 +96,16 @@ class GamePage extends Page {
                         />
                     </div>
                 </div>
-                <div className={`play-button ${myChance ? '' : 'display-none'}`}>
+                <div className='play-button'>
+                    <MyButton
+                        label='Stats'
+                        onClick={this.displayStats}
+                    />
                     <MyButton
                         label='Play'
+                        disabled={!myChance}
                         onClick={this.playSelectedCard}
-                        className='mt-5'/>
+                    />
                 </div>
             </div>
         );

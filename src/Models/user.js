@@ -12,4 +12,8 @@ export default class User extends BaseModel {
     isValidForLogin() {
         return !!(this.get('email') && this.get('password'));
     }
+
+    isValidForGuestLogin() {
+        return !!(this.get('email'));
+    }
 }

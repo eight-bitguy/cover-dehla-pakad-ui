@@ -1,0 +1,9 @@
+.stats-container {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+
+  .stats {
+    height: 80vh;
+  }
+}

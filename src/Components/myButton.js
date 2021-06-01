@@ -7,7 +7,7 @@ const MyButton = (props) => {
         <button
             onClick={props.onClick}
             disabled={props.disabled}
-            className={`my-button ${props.className ?? ''}`}>
+            className={`my-button ${props.className ?? ''} ${props.disabled ? 'button-disabled' : ''}`}>
             <div className='button-loader-container'>{props.loading ? <Loader /> : props.label}</div>
         </button>
         </div>

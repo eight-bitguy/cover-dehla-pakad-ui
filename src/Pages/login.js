@@ -5,12 +5,13 @@ import MyInput from "../Components/myInput";
 import MyButton from "../Components/myButton";
 import {addUser} from "../Redux/modules/users";
 import Url from "../JS/url";
-import { login } from "../Api/login";
+import {guestLogin, login} from "../Api/login";
 import {updateLoggedInUserId} from "../Redux/modules/additionalInfo";
 import {batch} from "react-redux";
 import User from "../Models/user";
 import Error from "../Components/error";
 import GoBack from "../Components/back";
+import Ruler from "../Components/ruler";
 
 const Login = (props) => {
     const [user, _setUser] = useState(new User());
@@ -29,14 +30,29 @@ const Login = (props) => {
         }
 
         setLoading(true);
-        const response = await login(user.attributes);
-        const parsedResponse = response.response;
-        if (parsedResponse && parsedResponse.data && parsedResponse.data.errors) {
-            setLoading(false);
-            setError(parsedResponse.data.errors);
+        await performLogin();
+        setLoading(false);
+    };
+
+    const onGuestLogin = async () => {
+        if (!user.isValidForGuestLogin() || isLoading) {
             return;
         }
 
+        setLoading(true);
+        const response = await guestLogin(user.get('email'));
+        await saveUserProfile(response);
+        setLoading(false);
+
+        props.dispatch(replace(Url.LandingPage));
+    };
+
+    const isValidResponse = (response) => {
+        const parsedResponse = response.response;
+        return !(parsedResponse && parsedResponse.data && parsedResponse.data.errors);
+    };
+
+    const saveUserProfile = async (response) => {
         const userProfile = response.data;
         await window.setToken(userProfile['token']);
 
@@ -44,7 +60,16 @@ const Login = (props) => {
             props.dispatch(addUser([userProfile]));
             props.dispatch(updateLoggedInUserId(userProfile.id));
         });
-        setLoading(false);
+
+    };
+    const performLogin = async () => {
+        const response = await login(user.attributes);
+        if (!isValidResponse(response)) {
+            setError('Error in Login');
+            return;
+        }
+
+        await saveUserProfile(response);
         props.dispatch(replace(Url.LandingPage));
     };
 
@@ -53,24 +78,37 @@ const Login = (props) => {
             <div className="login">
                 <GoBack url={Url.Home}/>
                 <Error error={error} />
+                {/*<MyInput*/}
+                {/*    type='text'*/}
+                {/*    name='email'*/}
+                {/*    placeholder='Email'*/}
+                {/*    onChangeText={setUser}*/}
+                {/*/>*/}
+                {/*<MyInput*/}
+                {/*    type='password'*/}
+                {/*    name='password'*/}
+                {/*    placeholder='Password'*/}
+                {/*    onChangeText={setUser}*/}
+                {/*/>*/}
+                {/*<MyButton*/}
+                {/*    loading={isLoading}*/}
+                {/*    onClick={onLogin}*/}
+                {/*    label='Login'*/}
+                {/*/>*/}
+                {/*<Ruler/>*/}
                 <MyInput
                     type='text'
                     name='email'
-                    placeholder='Email'
-                    onChangeText={setUser}
-                />
-                <MyInput
-                    type='password'
-                    name='password'
-                    placeholder='Password'
+                    placeholder='name'
                     onChangeText={setUser}
                 />
                 <MyButton
                     loading={isLoading}
-                    onClick={onLogin}
+                    onClick={onGuestLogin}
                     label='Login'
                 />
             </div>
+
         </div>
     );
 }

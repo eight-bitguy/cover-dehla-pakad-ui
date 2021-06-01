@@ -27,4 +27,8 @@ export default class Url {
     static GameOver(roomCode) {
         return `/game/${roomCode ? roomCode : ':roomCode'}/over`;
     }
+
+    static get Stats() {
+        return '/game/Stats';
+    }
 }

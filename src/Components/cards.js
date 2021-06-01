@@ -30,7 +30,7 @@ const Cards = (props) => {
     }
 
     return (
-        <div className='hand fan' data-fan='spacing: 0.28; width: 73; radius: 134;'>
+        <div className='hand fan' data-fan='spacing: 0.28; width: 73; radius: 134px;'>
             {cards.map((card, index) =>
                 <img
                     data-card={card}

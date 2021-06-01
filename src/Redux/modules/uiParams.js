@@ -1,22 +1,36 @@
 import update from 'immutability-helper';
 
-const FALSH_CARD = 'FALSH_CARD';
+const FLASH_CARD = 'FLASH_CARD';
+const UPDATE_UI_PARAMS = 'UPDATE_UI_PARAMS';
 
 export function updateFlashCard(data) {
     return {
-        type: FALSH_CARD,
+        type: FLASH_CARD,
         data
     };
 }
 
+export function updateUiParams(key, value) {
+    return {
+        type: UPDATE_UI_PARAMS,
+        key,
+        value
+    };
+
+}
+
 const initialState = {
-    flashCard: false
+    flashCard: false,
+    displayStats: false
 };
 
 export default function uiParams(state = initialState, action) {
     switch (action.type) {
-        case FALSH_CARD:
+        case FLASH_CARD:
             return update(state, {flashCard: {$set: action.data}});
+
+        case UPDATE_UI_PARAMS:
+            return update(state, {[action.key]: {$set: action.value}});
 
         default:
             return state;
