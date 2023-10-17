@@ -265,3 +265,25 @@ export const rankMap = {
 export function mapCardToImage(card) {
     return `${rankMap[card[0]]}${card[1]}.svg`
 }
+
+export function canOpenTrump() {
+    const {additionalInfo, cards} = getStore();
+    if (additionalInfo.trumpDecidedBy) {
+        console.log('first');
+        return false;
+    }
+    console.log(cards);
+    if (cards['stake']) {
+        const chance = cards.stake.length ? cards.stake[0].charAt(1) : null;
+        if (!chance) {
+            console.log('seconf');
+            return false;
+        }
+        const hand = cards.hand;
+        const hasNoCardsOfChance = hand.every(card => card[1] !== chance);
+        console.log("sec", hasNoCardsOfChance, additionalInfo.trumpHiddenBy != myPositionInCurrentRoom());
+
+        return hasNoCardsOfChance && additionalInfo.trumpHiddenBy != myPositionInCurrentRoom();
+    }
+    return false;
+}

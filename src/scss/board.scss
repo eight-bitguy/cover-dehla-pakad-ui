@@ -11,10 +11,17 @@
 
   .row-1 {
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     align-items: center;
-    height: 120px;
+    height: 120px;  
   }
+
+  .mini-score-board {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+  }
+
 
   .row-2 {
     display: flex;

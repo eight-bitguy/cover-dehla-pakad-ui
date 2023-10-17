@@ -1,10 +1,10 @@
 import React from 'react';
 import Page from './page';
 import connect from 'react-redux/es/connect/connect';
-import {getInitialCards, play} from "../Api/game";
+import {getInitialCards, play, openTrump} from "../Api/game";
 import Cards from "../Components/cards";
 import { replace } from 'connected-react-router'
-import {isMyChance, removeCardFromHand} from "../JS/helper";
+import {isMyChance, removeCardFromHand, canOpenTrump} from "../JS/helper";
 import Url from "../JS/url";
 import MyButton from "../Components/myButton";
 import {updateAllCards} from "../Redux/modules/cards";
@@ -77,8 +77,14 @@ class GamePage extends Page {
 
     onClick = () => {};
 
+    openTrumpCard = async () => {
+        const {room} = this.props;
+        await openTrump(room.code);
+    }
+
     render() {
         const myChance = isMyChance();
+        const showOpenTrumpButton = canOpenTrump();
         return (
             <div className='game-page-container'>
                 <div className='stake-container'>
@@ -99,15 +105,22 @@ class GamePage extends Page {
                         onClick={this.playSelectedCard}
                         className='mt-5'/>
                 </div>
+                <div className={`play-button ${showOpenTrumpButton ? '' : 'display-none'}`}>
+                    <MyButton
+                        label='Open Trump'
+                        onClick={this.openTrumpCard}
+                        className='mt-5'/>
+                </div>
             </div>
         );
     }
 }
 
-function mapStateToProps({room, additionalInfo}) {
+function mapStateToProps({room, additionalInfo, cards}) {
     return {
         room,
-        additionalInfo
+        additionalInfo,
+        cards
     };
 }
 
