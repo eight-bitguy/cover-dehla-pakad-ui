@@ -23,13 +23,13 @@
     display: flex;
     border-bottom: 1px solid $primary-color;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
   }
 
   .below-header-row {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
   }
 
   .row {
