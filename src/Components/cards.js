@@ -33,6 +33,7 @@ const Cards = (props) => {
         <div className='hand fan' data-fan='spacing: 0.28; width: 73; radius: 134;'>
             {cards.map((card, index) =>
                 <img
+                    alt={card}
                     data-card={card}
                     key={`card-par-${index}`}
                     className={`card ${selectedCard === card ? '-is-selected' : ''}`}

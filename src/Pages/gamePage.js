@@ -13,6 +13,7 @@ import {batch} from "react-redux";
 import memoizeOne from 'memoize-one';
 import PageLoadable from "../Components/loadable";
 import {updateFlashCard} from "../Redux/modules/uiParams";
+import ScoreBoard from '../Components/scoreBoard';
 
 const Board = PageLoadable({ loader: () => import('../Components/board') });
 
@@ -87,6 +88,9 @@ class GamePage extends Page {
         const showOpenTrumpButton = canOpenTrump();
         return (
             <div className='game-page-container'>
+                <div className='scoreboard-outter-div'>
+                    <ScoreBoard />
+                </div>
                 <div className='stake-container'>
                     <Board/>
                 </div>

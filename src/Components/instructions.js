@@ -11,7 +11,7 @@ const Instructions = () => {
                         <TrumpIcon/>
                     </div>
                     <div className='description'>
-                        Player who has decided the trump
+                        Player who has opened the trump
                     </div>
                 </div>
                 <div className='row'>
@@ -19,7 +19,7 @@ const Instructions = () => {
                         <ClaimIcon/>
                     </div>
                     <div className='description'>
-                        Player who is claiming dehla(s)
+                        Player who is hidding trump
                     </div>
                 </div>
             </div>

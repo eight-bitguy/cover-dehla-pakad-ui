@@ -2,11 +2,11 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {store} from "../index";
 import {updateAdditionalInfo} from "../Redux/modules/additionalInfo";
-import {updateAllStake} from "../Redux/modules/cards";
+import {updateAllStake, addCardsInHand} from "../Redux/modules/cards";
 import {updateRoomStatus} from "../Redux/modules/room";
 import Url from "./url";
 import {replace} from "connected-react-router";
-import {joinNewUsers} from "./helper";
+import {joinNewUsers, myPositionInCurrentRoom} from "./helper";
 import {batch} from "react-redux";
 import {updateFlashCard} from "../Redux/modules/uiParams";
 import Room from "../Models/room";
@@ -59,11 +59,14 @@ export default class Websocket {
     handleNewGameEvent = async (e) => {
         const data = {
             stake: e.stake,
-            oldStake:e.oldStake
+            oldStake:e.oldStake,
+
         };
+        const handCard = e['handDeck'][myPositionInCurrentRoom()];
         await batch(async () => {
             this.dispatch(updateAdditionalInfo(e));
             this.dispatch(updateAllStake(data));
+            this.dispatch(addCardsInHand(handCard));
             if (data.oldStake && data.oldStake.length===4) {
                 this.dispatch(updateFlashCard(true));
             }

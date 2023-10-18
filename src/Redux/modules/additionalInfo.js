@@ -36,14 +36,12 @@ export function updateAdditionalInfo(nextChance) {
 const initialState = {
     loggedInUserId: null,
     nextChance: null,
-    claimingBy: null,
     dehlaOnStake: 0,
     score: {a1: 0, a2: 0, b1: 0, b2: 0},
-    dehla_score: {a1: 0, a2: 0, b1: 0, b2: 0},
+    dehlaScore: {a1: '', a2: '', b1: '', b2: ''},
     trumpHiddenBy: 'a1',
     trump: null,
     trumpDecidedBy: null,
-    trumpFromNextIteration: null,
     oldStakeFirstChance: null,
     roomStatus: null
 };

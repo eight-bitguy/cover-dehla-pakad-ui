@@ -8,11 +8,11 @@ const MiniScoreBoard = (props) => {
         <div className='score-board-container'>
             <div className='row' key={'A'}>
                 <span className='name'>A</span>
-                <span className='score'>{scores['dehla']['A'], scores['non-dehla']['A']}</span>
+                <span className='score'>{scores['dehla']['A']} {scores['non-dehla']['A']}</span>
             </div>
             <div className='row' key={'B'}>
                 <span className='name'>B</span>
-                <span className='score'>{scores['dehla']['B'], scores['non-dehla']['B']}</span>
+                <span className='score'>{scores['dehla']['B']} {scores['non-dehla']['B']}</span>
             </div>
         </div>
     );
@@ -20,14 +20,15 @@ const MiniScoreBoard = (props) => {
 
 function mapStateToProps(props) {
     const {
-        additionalInfo: {score, dehla_score},
+        additionalInfo: {score, dehlaScore},
     } = props;
 
     const scores = {
         'dehla': {
-            'A': dehla_score['a1']+dehla_score['a2'],
-            'B': dehla_score['b1']+dehla_score['b2']
+            'A': dehlaScore['a1'] + dehlaScore['a2'],
+            'B': dehlaScore['b1'] + dehlaScore['b2']
         },
+        
         'non-dehla': {
             'A': score['a1']+score['a2'],
             'B': score['b1']+score['b2']

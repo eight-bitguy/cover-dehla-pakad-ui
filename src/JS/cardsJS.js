@@ -4,7 +4,6 @@
 var cardsScript = document.currentScript;
 
 (function (root, factory) {
-    'use strict';
 
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
@@ -19,7 +18,6 @@ var cardsScript = document.currentScript;
         root.cards = factory(root.jQuery);
     }
 }(this, function ($) {
-    'use strict';
 
     var module = {
         options: {
@@ -152,8 +150,8 @@ var cardsScript = document.currentScript;
         cards = module.cardNames(cards);
         hand.empty();
         for (i = 0; i < cards.length; ++i) {
-            src = "src='" + module.options.imagesUrl + cards[i] + '.svg' + "'";
-            hand.append("<img class='card' " + src + ">");
+            src = `src='${module.options.imagesUrl}${cards[i]}.svg'`;
+            hand.append(`<img class='card' ${src}>`);
         }
     }
 
@@ -204,7 +202,7 @@ var cardsScript = document.currentScript;
             var rotationAngle = Math.round(coord.angle);
             var prefixes = ["Webkit", "Moz", "O", "ms"];
             prefixes.forEach(function (prefix) {
-                card.style[prefix + "Transform"] = "rotate(" + rotationAngle + "deg)" + " translateZ(0)";
+                card.style[`${prefix}Transform`] = `rotate(${rotationAngle}deg) translateZ(0)`;
             });
         });
 

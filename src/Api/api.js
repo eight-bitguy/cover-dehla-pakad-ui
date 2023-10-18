@@ -1,5 +1,3 @@
-import Url from "../JS/url";
-
 const caller = require('axios').default;
 
 export function addInterceptor() {

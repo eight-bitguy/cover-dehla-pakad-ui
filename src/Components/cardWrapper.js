@@ -72,7 +72,7 @@ const CardWrapper = (props) => {
     let card, position;
 
     const {
-        nextChance, claimingBy, trumpDecidedBy, displayIndex
+        nextChance, trumpDecidedBy, displayIndex, trumpHiddenBy
     } = props;
 
     const mapping = getMapping(props);
@@ -86,13 +86,13 @@ const CardWrapper = (props) => {
     return (
         <div className={`player-card-div ${nextChance === position ? '-next-chance' : ''}`}>
             <div className={`card-and-sign-div ${displayIndex === 3 ? '-rev' : ''}`}>
-                <ShowIcon toShow={claimingBy === position} Icon={<ClaimIcon/>}/>
+                <ShowIcon toShow={trumpHiddenBy === position} Icon={<ClaimIcon/>}/>
                 <div className='card-and-name-div'>
                     <div className={`player-name ${canFlash ? '-flash' : ''}`}>
                         {getPlayerNameFromPosition(position)}
                     </div>
                     <div className='card-div'>
-                        {card && <img className='card' src={require(`./../IMAGES/${rank[card[0]]}${card[1]}.svg`)} />}
+                        {card && <img alt={position} className='card' src={require(`./../IMAGES/${rank[card[0]]}${card[1]}.svg`)} />}
                     </div>
                 </div>
                 <ShowIcon toShow={trumpDecidedBy === position} Icon={<TrumpIcon/>}/>
@@ -104,12 +104,12 @@ const CardWrapper = (props) => {
 function mapStateToProps(props) {
     const {
         roomUsers, cards: {stake, oldStake},
-        additionalInfo: {nextChance, claimingBy, trumpDecidedBy, oldStakeFirstChance, roomStatus},
+        additionalInfo: {nextChance, trumpDecidedBy, oldStakeFirstChance, roomStatus, trumpHiddenBy},
         uiParams: { flashCard },
     } = props;
 
     return {
-        flashCard, nextChance, claimingBy, trumpDecidedBy, oldStakeFirstChance, stake, oldStake, roomUsers, roomStatus
+        flashCard, nextChance, trumpDecidedBy, oldStakeFirstChance, stake, oldStake, roomUsers, roomStatus, trumpHiddenBy
     };
 }
 
