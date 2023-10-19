@@ -8,3 +8,7 @@ export async function getInitialCards(roomCode) {
 export async function play(roomCode, card) {
     return await post(Uri.play(roomCode), card);
 }
+
+export async function openTrump(roomCode) {
+    return await post(Uri.openTrump(roomCode));
+}

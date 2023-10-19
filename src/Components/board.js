@@ -13,9 +13,9 @@ const Board = () => {
                     <CardWrapper displayIndex={2}/>
                 </div>
                 <div className='row-2'>
-                    <CardWrapper displayIndex={3}/>
-                    <Bowl/>
                     <CardWrapper displayIndex={1}/>
+                    <Bowl/>
+                    <CardWrapper displayIndex={3}/>
                 </div>
                 <div className='row-3'>
                     <CardWrapper displayIndex={0}/>

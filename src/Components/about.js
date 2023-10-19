@@ -10,7 +10,7 @@ const About = () => {
     return (
         <div className='about-container'>
             <div className='about'>
-                <span>Developed and designed by <a className='name' href="http://eightbitguy.in" target='_blank'>eight bitguy</a></span>
+                <span>Developed and designed by <a className='name' href="http://eightbitguy.in" target=''>eight bitguy</a></span>
             </div>
         </div>
     );

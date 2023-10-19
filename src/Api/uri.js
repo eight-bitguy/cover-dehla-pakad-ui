@@ -47,4 +47,8 @@ export default class Uri {
     static play = (roomCode) => {
         return `${Uri.prefix}/room/${roomCode}/play`;
     }
+
+    static openTrump = (roomCode) => {
+        return `${Uri.prefix}/room/${roomCode}/open-trump`;
+    }
 }

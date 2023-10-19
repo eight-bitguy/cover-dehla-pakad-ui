@@ -1,14 +1,12 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {store} from "../index";
-import {updateAdditionalInfo} from "../Redux/modules/additionalInfo";
-import {updateAllStake} from "../Redux/modules/cards";
+import {updateOnNewGameEvent, flashCard} from "../Redux/modules/additionalInfo";
 import {updateRoomStatus} from "../Redux/modules/room";
 import Url from "./url";
 import {replace} from "connected-react-router";
-import {joinNewUsers} from "./helper";
+import {joinNewUsers, sumObjectValues, sumObjectChar, fetchAndStoreInitialData, getStore} from "./helper";
 import {batch} from "react-redux";
-import {updateFlashCard} from "../Redux/modules/uiParams";
 import Room from "../Models/room";
 
 export default class Websocket {
@@ -51,22 +49,40 @@ export default class Websocket {
         this.echoClient.private(channelId)
             .listen('BroadcastNewPlayerJoinEvent', this.handleNewPlayerJoinEvent)
             .listen('BroadcastRoomStartEvent', this.handleStartRoomEvent)
-            .listen('BroadcastNewGameEvent', this.handleNewGameEvent);
+            .listen('BroadcastNewGameEvent', this.handleNewGameEvent)
+            .listen('BroadcastTrumpOpenEvent', this.handleTrumpOpenEvent)
 
         this.channelId = channelId;
     }
 
+    handleTrumpOpenEvent = async () => {
+        await fetchAndStoreInitialData(this.dispatch);
+    }
+
     handleNewGameEvent = async (e) => {
-        const data = {
-            stake: e.stake,
-            oldStake:e.oldStake
-        };
+        const {cards:{hand}} = getStore();
         await batch(async () => {
-            this.dispatch(updateAdditionalInfo(e));
-            this.dispatch(updateAllStake(data));
-            if (data.oldStake && data.oldStake.length===4) {
-                this.dispatch(updateFlashCard(true));
+            
+            const shouldFlashCard = (
+                e.stakeWithUser.length === 4 
+                && (sumObjectValues(e.score) + sumObjectChar(e.dehlaScore) > 0)
+            );
+
+            if(!shouldFlashCard) {
+                this.dispatch(updateOnNewGameEvent({...e, hand}));
+                return;
             }
+
+            this.dispatch(flashCard({nextChance:e.nextChance, stakeWithUser: e.stakeWithUser}));
+            setTimeout(() => {
+                const toUpdate = {...e, flashCard: false, hand, stakeWithUser: []};
+                this.dispatch(updateOnNewGameEvent(toUpdate));
+                if (e.roomStatus === Room.STATUS_INACTIVE) {
+                    this.dispatch(replace(Url.GameOver(window.getRoomCode())));
+                }
+    
+            }, 3000);
+
         });
     };
 

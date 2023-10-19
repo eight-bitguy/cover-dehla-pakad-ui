@@ -25,9 +25,9 @@
     "underscore": "^1.10.2"
   },
   "devDependencies": {
-    "redux-devtools": "^3.5.0",
     "onchange": "^7.0.2",
-    "parallelshell": "^3.0.2"
+    "parallelshell": "3.0.1",
+    "redux-devtools": "^3.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

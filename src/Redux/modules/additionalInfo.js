@@ -1,9 +1,5 @@
 import update from 'immutability-helper';
-
-const UPDATE_LOGGED_IN_USER_ID = 'UPDATE_LOGGED_IN_USER_ID';
-const UPDATE_NEXT_CHANCE = 'UPDATE_NEXT_CHANCE';
-const UPDATE_ADDITIONAL_INFO = 'UPDATE_ADDITIONAL_INFO';
-const UPDATE_OLD_STAKE_FIRST_CHANCE = 'UPDATE_OLD_STAKE_FIRST_CHANCE';
+import {FALSH_CARD, PLAY_CARD, UPDATE_LOGGED_IN_USER_ID, UPDATE_NEW_GAME_EVENT, OPEN_TRUMP} from './../events';
 
 export function updateLoggedInUserId(userId) {
     return {
@@ -12,38 +8,42 @@ export function updateLoggedInUserId(userId) {
     };
 }
 
-export function updateNextChance(nextChance) {
+export function openTrumpEvent(position) {
     return {
-        type: UPDATE_NEXT_CHANCE,
-        data: nextChance
+        type: OPEN_TRUMP,
+        trumpDecidedBy: position
     };
 }
 
-export function updateOldStakeFirstChance(firstChance) {
+export function updateOnNewGameEvent(event) {
     return {
-        type: UPDATE_OLD_STAKE_FIRST_CHANCE,
-        data: firstChance
+        type: UPDATE_NEW_GAME_EVENT,
+        ...event
     };
 }
 
-export function updateAdditionalInfo(nextChance) {
+export function flashCard(event) {
     return {
-        type: UPDATE_ADDITIONAL_INFO,
-        data: nextChance
+        type: FALSH_CARD,
+        flashCard: true,
+        nextChance: event.nextChance,
+        stakeWithUser: event.stakeWithUser
     };
 }
+
+
 
 const initialState = {
     loggedInUserId: null,
     nextChance: null,
-    claimingBy: null,
     dehlaOnStake: 0,
-    score: {a1: 0, a2: 0, b1: 0, b2: 2},
+    score: {a1: 0, a2: 0, b1: 0, b2: 0},
+    dehlaScore: {a1: '', a2: '', b1: '', b2: ''},
+    trumpHiddenBy: 'a1',
     trump: null,
     trumpDecidedBy: null,
-    trumpFromNextIteration: null,
-    oldStakeFirstChance: null,
-    roomStatus: null
+    roomStatus: null,
+    flashCard: false
 };
 
 export default function additionalInfo(state = initialState, action) {
@@ -51,14 +51,30 @@ export default function additionalInfo(state = initialState, action) {
         case UPDATE_LOGGED_IN_USER_ID:
             return update(state, {loggedInUserId: {$set: action.data}});
 
-        case UPDATE_NEXT_CHANCE:
-            return update(state, {nextChance: {$set: action.data}});
+        case OPEN_TRUMP:
+            return update(state, {trumpDecidedBy: {$set: action.trumpDecidedBy}});
 
-        case UPDATE_ADDITIONAL_INFO:
-            return update(state, {$merge: action.data});
+        case FALSH_CARD:
+            return update(state, 
+                {
+                    flashCard: {$set: true},
+                    nextChance: {$set: action.nextChance},
+                });
 
-        case UPDATE_OLD_STAKE_FIRST_CHANCE:
-            return update(state, {oldStakeFirstChance: {$set: action.data}});
+        case PLAY_CARD:
+            return update(state, {nextChance: {$set: action.nextChance}});
+
+        case UPDATE_NEW_GAME_EVENT:
+            return update(state, {
+                nextChance: { $set: action.nextChance },
+                score: { $set: action.score },
+                dehlaScore: { $set: action.dehlaScore },
+                trumpHiddenBy: { $set: action.trumpHiddenBy },
+                trump: { $set: action.trump },
+                trumpDecidedBy: { $set: action.trumpDecidedBy },
+                roomStatus: { $set: action.roomStatus },
+                flashCard: { $set: action.flashCard }
+            });
 
         default:
             return state;

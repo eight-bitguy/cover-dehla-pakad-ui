@@ -34,7 +34,7 @@ window.getRoomCode = () => {
     return localStorage.getItem('room-code');
 };
 
-window.apiUrl = () => `http://${window.location.hostname}`;
+window.apiUrl = () => `https://18ca-2401-4900-1f25-21f9-5988-c930-ee68-f5b0.ngrok-free.app`;
 
 addInterceptor();
 ReactDOM.render(

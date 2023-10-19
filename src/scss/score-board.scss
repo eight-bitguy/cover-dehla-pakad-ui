@@ -1,10 +1,36 @@
 @import "variables";
 
+.scoreboard-outter-div {
+  margin: 10px;
+  margin-top: 30px;
+}
 .score-board-container {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  .scoreboard-table {
+    display: flex;
+    width: 90%;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+    flex-direction: column;
+  }
+
+  .header-row {
+    display: flex;
+    border-bottom: 1px solid $primary-color;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .below-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
 
   .row {
     font-family: $primary-font;
@@ -13,5 +39,30 @@
     font-weight: bold;
     justify-content: space-between;
     display: flex;
+  }
+
+  .first-text {
+    color: $primary-color;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .text {
+    color: $primary-color;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .dehla-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .logout-icon {
+    display: flex;
+    fill: $primary-color;
+    width: auto;
   }
 }

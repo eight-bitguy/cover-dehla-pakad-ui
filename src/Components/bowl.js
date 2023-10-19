@@ -8,12 +8,10 @@ import SpadeIcon from "../Icons/spadesIcon";
 const Bowl = (props) => {
 
     const getIcon = () => {
-        const {trump, trumpFromNextIteration} = props.additionalInfo;
-        if (!trump && !trumpFromNextIteration) {
+        if (!props.trump) {
             return <div/>;
         }
-
-        switch (trump ?? trumpFromNextIteration) {
+        switch (props.trump[1]) {
             case "H":
                 return <HeartIcon/>;
             case "C":
@@ -38,7 +36,7 @@ const Bowl = (props) => {
 
 function mapStateToProps({additionalInfo}) {
     return {
-        additionalInfo
+        trump: additionalInfo.trump
     };
 }
 

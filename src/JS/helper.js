@@ -1,11 +1,15 @@
 import {store} from "../index";
 import User from "../Models/user";
-import {addCardsInHand} from "../Redux/modules/cards";
+import {playCard} from "../Redux/modules/cards";
 import {addUser} from "../Redux/modules/users";
 import {addUsersInRoom} from "../Redux/modules/roomUsers";
 import {getJoinedUses, joinRoom} from "../Api/room";
 import {addRoom} from "../Redux/modules/room";
 import {batch} from "react-redux";
+import { getInitialCards } from "../Api/game";
+import { updateOnNewGameEvent } from "../Redux/modules/additionalInfo";
+import { replace } from "connected-react-router";
+import Url from "./url";
 import Room from "../Models/room";
 
 /**
@@ -52,18 +56,9 @@ export function getLoggedInUser() {
 
 /**
  *
- * @returns {*}
- */
-export function getCurrentRoom() {
-    const reduxStore = getStore();
-    return reduxStore.room;
-}
-
-/**
- *
  * @returns {{}}
  */
-function getStore() {
+export function getStore() {
     return store.getState();
 }
 
@@ -72,11 +67,10 @@ function getStore() {
  * @returns {boolean}
  */
 export function isAdmin() {
-    const {roomUsers} = getStore();
-    const currentRoom = getCurrentRoom();
+    const {roomUsers, room} = getStore();
     const user = getLoggedInUser();
 
-    if (!currentRoom) {
+    if (!room) {
         return false;
     }
 
@@ -86,16 +80,46 @@ export function isAdmin() {
     ));
 }
 
+export function sumObjectValues(object) {
+    return Object.values(object).reduce((accumulator, value) => {
+      return accumulator + value;
+    }, 0);
+}
+
+export function sumObjectChar(object) {
+    return Object.values(object).reduce((accumulator, value) => {
+      return accumulator + value.length;
+    }, 0);
+}
 /**
  *
  * @param card
  */
-export function removeCardFromHand(card)
+export function moveCardFromHandToStake(card)
 {
-    const {cards} = getStore();
+    const {cards, roomUsers} = getStore();
+    const position = roomUsers[0].position;
+    
     const currentHand = cards.hand;
     currentHand.splice(currentHand.indexOf(card), 1);
-    store.dispatch(addCardsInHand(currentHand));
+
+    const newStakeWithUser = Object.assign([], cards.stakeWithUser);
+    newStakeWithUser.push([position, card]);
+
+    
+
+    const data = {
+        hand: currentHand,
+        stakeWithUser: newStakeWithUser,
+        nextChance: getNextChance()
+    };
+    store.dispatch(playCard(data));
+}
+
+function getNextChance() {
+    const {cards, additionalInfo: {nextChance} } = getStore();
+    const nextPlayerPosition = Room.ALL_POSITIONS[(Room.ALL_POSITIONS.indexOf(nextChance) + 1)%4];
+    return cards.stakeWithUser.length === 3 ? nextChance : nextPlayerPosition;
 }
 
 /**
@@ -103,18 +127,12 @@ export function removeCardFromHand(card)
  * @returns {*}
  */
 export function myPositionInCurrentRoom() {
-    const {additionalInfo, roomUsers} = getStore();
-    return roomUsers && roomUsers.length ?
-        (roomUsers.find(user => +user.userId === +additionalInfo.loggedInUserId).position || '' ): '';
-}
+    const {roomUsers} = getStore();
 
-/**
- *
- * @returns {boolean}
- */
-export function isMyChance() {
-    const {additionalInfo} = getStore();
-    return additionalInfo.nextChance === myPositionInCurrentRoom();
+    if (roomUsers.length) {
+        return roomUsers[0].position;
+    }
+    return null;
 }
 
 /**
@@ -129,13 +147,15 @@ export async function joinNewUsers(users) {
         email: user.email,
         position: user['room_users'].data.position,
     }));
+
+    const mappedPlayers = getPlayerPositions(roomUsers)
     users.forEach((user, index) => {
         delete users[index]['room_users'];
     });
 
     await batch(async () => {
         store.dispatch(addUser(users));
-        store.dispatch(addUsersInRoom(roomUsers));
+        store.dispatch(addUsersInRoom(mappedPlayers));
     });
 }
 
@@ -166,75 +186,27 @@ export async function joinRoomWithRoomCode(roomCode) {
     return true;
 }
 
-/**
- *
- * @param stake
- * @param nextChance
- * @returns {{}}
- */
-export function getPositionCardMapping(stake, nextChance) {
-    const stakeCopy = JSON.parse(JSON.stringify(stake));
-    const mapping = {};
-    let positionToCheck = nextChance;
-
-    if (!stakeCopy || !nextChance) {
-        return mapping;
+export function getPlayerPositions(roomUsers) {
+    if (roomUsers.length < 4) {
+        return roomUsers;
     }
-
-    stakeCopy.reverse();
-    stakeCopy.forEach((card) => {
-        positionToCheck = getPreviousPosition(positionToCheck);
-        mapping[positionToCheck] = card;
-    });
-
-    return arrangePositionAccordingToThePlayer(mapping);
-}
-
-/**
- *
- * @param position
- * @returns {string}
- */
-export function getPreviousPosition(position) {
-    const positionIndex = Room.ALL_POSITIONS.indexOf(position);
-    const previousPositionIndex = (positionIndex + 3) % 4;
-    return Room.ALL_POSITIONS[previousPositionIndex];
-}
-
-/**
- *
- * @param position
- * @returns {*}
- */
-export function getPlayerNameFromPosition(position) {
-    const {roomUsers} = getStore();
+    const {additionalInfo:{loggedInUserId}} = getStore();
     if (!roomUsers.length) {
-        return '';
+        return [];
     }
-    const user = roomUsers.find(user => user.position === position);
-    return user ? user.name : '';
-}
 
-/**
- *
- * @param mapping
- * @returns {*[]}
- */
-export function arrangePositionAccordingToThePlayer(mapping) {
-    const myPosition = myPositionInCurrentRoom();
-    const offset = Room.ALL_POSITIONS.indexOf(myPosition);
-
-    const arrangedPositions = [
-        Room.ALL_POSITIONS[(offset)],
-        Room.ALL_POSITIONS[(offset + 1) % 4],
-        Room.ALL_POSITIONS[(offset + 2) % 4],
-        Room.ALL_POSITIONS[(offset + 3) % 4]
-    ];
-
-    return arrangedPositions.map((position) => ({
-        position: position,
-        card: mapping[position]
-    }));
+    let myIndex = 0;
+    while(true) {
+        if (roomUsers[myIndex].userId === loggedInUserId) {
+            break;
+        }
+        myIndex = (myIndex + 1)%4;
+    }
+    const playerPositions = [];
+    for (let i = 0; i < roomUsers.length; i++) {
+        playerPositions[i] = roomUsers[(myIndex+i)%4];
+    }
+    return playerPositions;
 }
 
 /**
@@ -257,11 +229,33 @@ export const rankMap = {
     'K': 'K'
 };
 
-/**
- *
- * @param card
- * @returns {string}
- */
-export function mapCardToImage(card) {
-    return `${rankMap[card[0]]}${card[1]}.svg`
+export function canOpenTrump() {
+    const {additionalInfo, cards} = getStore();
+    if (additionalInfo.trumpDecidedBy) {
+        return false;
+    }
+    if (cards.stakeWithUser.length) {
+        const baseDeck = cards.stakeWithUser[0][1].charAt(1);
+        const hand = cards.hand;
+        const hasNoCardsOfChance = hand.every(card => card[1] !== baseDeck);
+        const myPosition = myPositionInCurrentRoom();
+
+        return hasNoCardsOfChance 
+        && additionalInfo.trumpHiddenBy !== myPosition
+        && myPosition === additionalInfo.nextChance;
+    }
+    return false;
+}
+
+export async function fetchAndStoreInitialData(dispatch) {
+    const data = await getInitialCards(window.getRoomCode());
+
+    if (!data) {
+        dispatch(replace(Url.LandingPage));
+        return;
+    }
+
+    await batch(async () => {
+        dispatch(updateOnNewGameEvent(data));
+    });
 }

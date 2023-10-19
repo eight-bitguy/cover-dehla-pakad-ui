@@ -1,6 +1,5 @@
 import { mergeBasedOnAttribute } from "../../JS/helper";
-
-const ADD_USER = 'ADD_USER';
+import { ADD_USER } from "../events";
 
 export function addUser(data) {
     return {

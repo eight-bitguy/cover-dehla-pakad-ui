@@ -1,22 +1,9 @@
 import React, {useEffect} from 'react';
 import './../JS/cardsJS'
 import connect from 'react-redux/es/connect/connect';
+import { rankMap } from '../JS/helper';
 
-const rankMap = {
-    'A': 'A',
-    '2': '2',
-    '3': '3',
-    '4': '4',
-    '5': '5',
-    '6': '6',
-    '7': '7',
-    '8': '8',
-    '9': '9',
-    'T': '10',
-    'J': 'J',
-    'Q': 'Q',
-    'K': 'K'
-};
+
 const Cards = (props) => {
 
     useEffect(() => {
@@ -33,6 +20,7 @@ const Cards = (props) => {
         <div className='hand fan' data-fan='spacing: 0.28; width: 73; radius: 134;'>
             {cards.map((card, index) =>
                 <img
+                    alt={card}
                     data-card={card}
                     key={`card-par-${index}`}
                     className={`card ${selectedCard === card ? '-is-selected' : ''}`}

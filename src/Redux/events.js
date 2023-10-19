@@ -1,0 +1,11 @@
+export const UPDATE_LOGGED_IN_USER_ID = 'UPDATE_LOGGED_IN_USER_ID';
+export const UPDATE_NEW_GAME_EVENT = 'UPDATE_NEW_GAME_EVENT';
+export const FALSH_CARD = 'FALSH_CARD';
+export const UPDATE_CARDS_ON_NEW_GAME_EVENT = 'UPDATE_CARDS_ON_NEW_GAME_EVENT';
+export const PLAY_CARD = 'PLAY_CARD';
+export const ADD_ROOM = 'ADD_ROOM';
+export const UPDATE_STATUS = 'UPDATE_STATUS';
+export const ADD_USER = 'ADD_USER';
+export const ADD_USERS_IN_ROOM = 'ADD_USERS_IN_ROOM';
+export const OPEN_TRUMP = 'OPEN_TRUMP';
+

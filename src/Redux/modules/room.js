@@ -1,7 +1,5 @@
 import update from 'immutability-helper';
-
-const ADD_ROOM = 'ADD_ROOM';
-const UPDATE_STATUS = 'UPDATE_STATUS';
+import { ADD_ROOM, UPDATE_STATUS } from '../events';
 
 export function addRoom(data) {
     return {
