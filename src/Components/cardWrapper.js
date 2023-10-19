@@ -1,12 +1,8 @@
 import React from 'react';
-import {getPlayerNameFromPosition, getPositionCardMapping} from "../JS/helper";
+import Page from '../Pages/page';
 import TrumpIcon from "../Icons/trumpIcon";
 import ClaimIcon from "../Icons/claimIcon";
 import connect from 'react-redux/es/connect/connect';
-import {updateFlashCard} from "../Redux/modules/uiParams";
-import { push } from 'connected-react-router'
-import Room from "../Models/room";
-import Url from "../JS/url";
 
 const rank = {
     'A': 'A',
@@ -36,80 +32,59 @@ const ShowIcon = ({toShow, Icon}) => {
     );
 };
 
-const getMapping = (props) => {
-    const {
-        stake, oldStake, nextChance, oldStakeFirstChance, flashCard, roomStatus
-    } = props;
+class CardWrapper extends Page {
 
-    let mapping = getPositionCardMapping(stake, nextChance);
-    if (stake && stake.length === 0 && flashCard) {
-        return getPositionCardMapping(oldStake, oldStakeFirstChance);
-    }
+    getCard(position) {
+        for(let i = 0; i < this.props.stakeWithUser.length; i++) {
+            const record = this.props.stakeWithUser[i];
+            if (record[0] === position) {
+                return record[1];
+            }
 
-    if (roomStatus === Room.STATUS_INACTIVE) {
-        props.dispatch(push(Url.GameOver(window.getRoomCode())));
-    }
+        }
+    };
 
-    return mapping;
-};
-
-const canCardFlash = (props, position) => {
-    const {
-        oldStake, flashCard, nextChance
-    } = props;
-
-    if (oldStake && (oldStake.length === 4) && flashCard && (nextChance === position)) {
-        setTimeout(() => {
-            props.dispatch(updateFlashCard(false));
-        }, 3000);
-
-        return true;
-    }
-    return false;
-};
-
-const CardWrapper = (props) => {
-    let card, position;
-
-    const {
-        nextChance, trumpDecidedBy, displayIndex, trumpHiddenBy
-    } = props;
-
-    const mapping = getMapping(props);
-
-    if (Object.keys(mapping).length) {
-        card=mapping[displayIndex].card;
-        position=mapping[displayIndex].position;
-    }
-    const canFlash = canCardFlash(props, position);
-
-    return (
-        <div className={`player-card-div ${nextChance === position ? '-next-chance' : ''}`}>
-            <div className={`card-and-sign-div ${displayIndex === 3 ? '-rev' : ''}`}>
-                <ShowIcon toShow={trumpHiddenBy === position} Icon={<ClaimIcon/>}/>
-                <div className='card-and-name-div'>
-                    <div className={`player-name ${canFlash ? '-flash' : ''}`}>
-                        {getPlayerNameFromPosition(position)}
+    render() {
+        const {
+            nextChance, trumpDecidedBy, displayIndex, trumpHiddenBy, roomUsers, flashCard
+        } = this.props;
+    
+        if (!roomUsers.length) {
+            return (<div />);
+        }
+    
+        const position = roomUsers[displayIndex].position;
+        const card = this.getCard(position);
+        const canFlash = flashCard && (nextChance === position);
+        
+        return (
+            <div className={`player-card-div ${nextChance === position ? '-next-chance' : ''}`}>
+                <div className={`card-and-sign-div ${displayIndex === 3 ? '-rev' : ''}`}>
+                    <ShowIcon toShow={trumpHiddenBy === position} Icon={<ClaimIcon/>}/>
+                    <div className='card-and-name-div'>
+                        <div className={`player-name ${canFlash ? '-flash' : ''}`}>
+                            {roomUsers.length ? roomUsers[displayIndex].name : ''}
+                        </div>
+                        <div className='card-div'>
+                            {card && <img alt={position} className='card' src={require(`./../IMAGES/${rank[card[0]]}${card[1]}.svg`)} />}
+                        </div>
                     </div>
-                    <div className='card-div'>
-                        {card && <img alt={position} className='card' src={require(`./../IMAGES/${rank[card[0]]}${card[1]}.svg`)} />}
-                    </div>
+                    <ShowIcon toShow={trumpDecidedBy === position} Icon={<TrumpIcon/>}/>
                 </div>
-                <ShowIcon toShow={trumpDecidedBy === position} Icon={<TrumpIcon/>}/>
             </div>
-        </div>
-    );
+        );    
+    }
+
 };
 
 function mapStateToProps(props) {
     const {
-        roomUsers, cards: {stake, oldStake},
-        additionalInfo: {nextChance, trumpDecidedBy, oldStakeFirstChance, roomStatus, trumpHiddenBy},
-        uiParams: { flashCard },
+        roomUsers, cards: {stakeWithUser},
+        additionalInfo: {nextChance, trumpDecidedBy, trumpHiddenBy, flashCard}
     } = props;
 
     return {
-        flashCard, nextChance, trumpDecidedBy, oldStakeFirstChance, stake, oldStake, roomUsers, roomStatus, trumpHiddenBy
+        flashCard, nextChance, trumpDecidedBy, roomUsers, trumpHiddenBy, stakeWithUser
     };
 }
 

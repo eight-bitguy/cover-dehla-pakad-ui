@@ -1,21 +1,12 @@
 import React from 'react';
 import Page from './page';
 import connect from 'react-redux/es/connect/connect';
-import {getInitialCards, play, openTrump} from "../Api/game";
+import {play, openTrump} from "../Api/game";
 import Cards from "../Components/cards";
-import { replace } from 'connected-react-router'
-import {isMyChance, removeCardFromHand, canOpenTrump} from "../JS/helper";
-import Url from "../JS/url";
+import {moveCardFromHandToStake, canOpenTrump, fetchAndStoreInitialData} from "../JS/helper";
 import MyButton from "../Components/myButton";
-import {updateAllCards} from "../Redux/modules/cards";
-import {updateNextChance, updateOldStakeFirstChance} from "../Redux/modules/additionalInfo";
-import {batch} from "react-redux";
-import memoizeOne from 'memoize-one';
-import PageLoadable from "../Components/loadable";
-import {updateFlashCard} from "../Redux/modules/uiParams";
 import ScoreBoard from '../Components/scoreBoard';
-
-const Board = PageLoadable({ loader: () => import('../Components/board') });
+import Board from "../Components/board";
 
 class GamePage extends Page {
 
@@ -31,27 +22,8 @@ class GamePage extends Page {
         if (!window.getRoomCode()) {
             return;
         }
-        const data = await getInitialCards(window.getRoomCode());
 
-        if (!data) {
-            this.props.dispatch(replace(Url.LandingPage));
-            return;
-        }
-
-        const cards = {
-            hand: data.initialCards,
-            oldStake: data.oldStake,
-            stake: data.initialStake,
-        };
-
-        await batch(async () => {
-            this.props.dispatch(updateAllCards(cards));
-            this.props.dispatch(updateNextChance(data.nextChance));
-            this.props.dispatch(updateOldStakeFirstChance(data.oldStakeFirstChance));
-            if (cards.oldStake && cards.oldStake.length===4) {
-                this.props.dispatch(updateFlashCard(true));
-            }
-        });
+        await fetchAndStoreInitialData(this.props.dispatch);
     };
 
     onClickOnCard = async (event) => {
@@ -64,27 +36,30 @@ class GamePage extends Page {
     playSelectedCard = async () => {
         const {cardToPlay} = this.state;
 
-        if (!isMyChance() || !cardToPlay) {
+        if (!this.isMyChance() || !cardToPlay) {
             return;
         }
 
-        removeCardFromHand(cardToPlay);
+        this.setState({cardToPlay: null});
+        moveCardFromHandToStake(cardToPlay);
+
         const {room} = this.props;
         const data = { card: cardToPlay };
         await play(room.code, data);
-
-        this.setState({cardToPlay: null});
     };
-
-    onClick = () => {};
 
     openTrumpCard = async () => {
         const {room} = this.props;
         await openTrump(room.code);
     }
 
+    isMyChance = () => {
+        const {roomUsers, additionalInfo: {nextChance}} = this.props;
+
+        return roomUsers.length && roomUsers[0].position === nextChance;
+    }
+
     render() {
-        const myChance = isMyChance();
         const showOpenTrumpButton = canOpenTrump();
         return (
             <div className='game-page-container'>
@@ -103,7 +78,7 @@ class GamePage extends Page {
                         />
                     </div>
                 </div>
-                <div className={`play-button ${myChance ? '' : 'display-none'}`}>
+                <div className={`play-button ${this.isMyChance() ? '' : 'display-none'}`}>
                     <MyButton
                         label='Play'
                         onClick={this.playSelectedCard}
@@ -120,14 +95,13 @@ class GamePage extends Page {
     }
 }
 
-function mapStateToProps({room, additionalInfo, cards}) {
+function mapStateToProps({room, additionalInfo, cards, roomUsers}) {
     return {
         room,
         additionalInfo,
-        cards
+        cards,
+        roomUsers
     };
 }
 
-const smartMapper = memoizeOne(mapStateToProps);
-
-export default connect(smartMapper)(GamePage)
+export default connect(mapStateToProps)(GamePage)

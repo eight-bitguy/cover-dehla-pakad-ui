@@ -34,6 +34,7 @@ const LandingPage = (props) => {
     };
 
     const joinRoom = async () => {
+        room.set('code', '111111');
         if (loading) {
             return ;
         }

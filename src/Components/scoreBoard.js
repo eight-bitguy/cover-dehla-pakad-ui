@@ -17,16 +17,16 @@ const ScoreBoard = (props) => {
                 for(let i = 0; i < cards.length; i++) {
                     switch (cards[i]) {
                         case "H":
-                            renderIcons.push(<HeartIcon width='10' height='10'/>);
+                            renderIcons.push(<HeartIcon width='10' height='10' key='H'/>);
                             break;
                         case "C":
-                            renderIcons.push(<ClubIcon width='10' height='10' />);
+                            renderIcons.push(<ClubIcon width='10' height='10' key='C'/>);
                             break;
                         case "D":
-                            renderIcons.push(<DiamondIcon width='10' height='10' />);
+                            renderIcons.push(<DiamondIcon width='10' height='10' key='D'/>);
                             break;
                         case "S":
-                            renderIcons.push(<SpadeIcon width='10' height='10' />);
+                            renderIcons.push(<SpadeIcon width='10' height='10' key='S'/>);
                             break;
                         default:
                             renderIcons.push(<div />);

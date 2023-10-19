@@ -1,14 +1,12 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {store} from "../index";
-import {updateAdditionalInfo} from "../Redux/modules/additionalInfo";
-import {updateAllStake, addCardsInHand} from "../Redux/modules/cards";
+import {updateOnNewGameEvent, updateFlashCard} from "../Redux/modules/additionalInfo";
 import {updateRoomStatus} from "../Redux/modules/room";
 import Url from "./url";
 import {replace} from "connected-react-router";
-import {joinNewUsers, myPositionInCurrentRoom} from "./helper";
+import {joinNewUsers, sumObjectValues, sumObjectChar, fetchAndStoreInitialData, getStore} from "./helper";
 import {batch} from "react-redux";
-import {updateFlashCard} from "../Redux/modules/uiParams";
 import Room from "../Models/room";
 
 export default class Websocket {
@@ -51,24 +49,31 @@ export default class Websocket {
         this.echoClient.private(channelId)
             .listen('BroadcastNewPlayerJoinEvent', this.handleNewPlayerJoinEvent)
             .listen('BroadcastRoomStartEvent', this.handleStartRoomEvent)
-            .listen('BroadcastNewGameEvent', this.handleNewGameEvent);
+            .listen('BroadcastNewGameEvent', this.handleNewGameEvent)
+            .listen('BroadcastTrumpOpenEvent', this.handleTrumpOpenEvent)
 
         this.channelId = channelId;
     }
 
-    handleNewGameEvent = async (e) => {
-        const data = {
-            stake: e.stake,
-            oldStake:e.oldStake,
+    handleTrumpOpenEvent = async () => {
+        await fetchAndStoreInitialData(this.dispatch);
+    }
 
-        };
-        const handCard = e['handDeck'][myPositionInCurrentRoom()];
+    handleNewGameEvent = async (e) => {
+        const {cards:{hand}} = getStore();
         await batch(async () => {
-            this.dispatch(updateAdditionalInfo(e));
-            this.dispatch(updateAllStake(data));
-            this.dispatch(addCardsInHand(handCard));
-            if (data.oldStake && data.oldStake.length===4) {
+            const shouldFlashCard = e.stakeWithUser.length === 0 
+            && (sumObjectValues(e.score) + sumObjectChar(e.dehlaScore) > 0);
+            
+            if(shouldFlashCard) {
                 this.dispatch(updateFlashCard(true));
+                setTimeout(() => {
+                    this.dispatch(updateOnNewGameEvent({...e, flashCard: false, hand}));
+        
+                }, 3000);
+            }
+            else {
+                this.dispatch(updateOnNewGameEvent({...e, hand}));
             }
         });
     };

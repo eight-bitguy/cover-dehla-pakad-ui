@@ -1,4 +1,4 @@
-const ADD_USERS_IN_ROOM = 'ADD_USERS_IN_ROOM';
+import { ADD_USERS_IN_ROOM } from '../events';
 
 export function addUsersInRoom(data) {
     return {
