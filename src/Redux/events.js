@@ -7,3 +7,5 @@ export const ADD_ROOM = 'ADD_ROOM';
 export const UPDATE_STATUS = 'UPDATE_STATUS';
 export const ADD_USER = 'ADD_USER';
 export const ADD_USERS_IN_ROOM = 'ADD_USERS_IN_ROOM';
+export const OPEN_TRUMP = 'OPEN_TRUMP';
+

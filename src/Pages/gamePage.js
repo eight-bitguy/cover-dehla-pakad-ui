@@ -7,6 +7,7 @@ import {moveCardFromHandToStake, canOpenTrump, fetchAndStoreInitialData} from ".
 import MyButton from "../Components/myButton";
 import ScoreBoard from '../Components/scoreBoard';
 import Board from "../Components/board";
+import { openTrumpEvent } from '../Redux/modules/additionalInfo';
 
 class GamePage extends Page {
 
@@ -49,7 +50,8 @@ class GamePage extends Page {
     };
 
     openTrumpCard = async () => {
-        const {room} = this.props;
+        const {room, roomUsers} = this.props;
+        this.props.dispatch(openTrumpEvent(roomUsers[0].position));
         await openTrump(room.code);
     }
 

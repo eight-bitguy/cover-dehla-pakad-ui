@@ -187,6 +187,9 @@ export async function joinRoomWithRoomCode(roomCode) {
 }
 
 export function getPlayerPositions(roomUsers) {
+    if (roomUsers.length < 4) {
+        return roomUsers;
+    }
     const {additionalInfo:{loggedInUserId}} = getStore();
     if (!roomUsers.length) {
         return [];

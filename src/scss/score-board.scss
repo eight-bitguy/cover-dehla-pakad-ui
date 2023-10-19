@@ -59,4 +59,10 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .logout-icon {
+    display: flex;
+    fill: $primary-color;
+    width: auto;
+  }
 }

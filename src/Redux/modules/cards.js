@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { PLAY_CARD, UPDATE_NEW_GAME_EVENT } from '../events';
+import { FALSH_CARD, PLAY_CARD, UPDATE_NEW_GAME_EVENT } from '../events';
 
 export function playCard(data) {
     return {
@@ -29,7 +29,13 @@ export default function rooms(state = initialState, action) {
                 hand: { $set: action.hand },
                 stakeWithUser: { $set: action.stakeWithUser }                
             });
-
+        
+            case FALSH_CARD:
+                return update(state, 
+                    {
+                        stakeWithUser: {$set: action.stakeWithUser},
+                    });
+    
         default:
             return state;
     }

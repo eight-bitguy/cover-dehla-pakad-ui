@@ -1,7 +1,7 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 import {store} from "../index";
-import {updateOnNewGameEvent, updateFlashCard} from "../Redux/modules/additionalInfo";
+import {updateOnNewGameEvent, flashCard} from "../Redux/modules/additionalInfo";
 import {updateRoomStatus} from "../Redux/modules/room";
 import Url from "./url";
 import {replace} from "connected-react-router";
@@ -62,19 +62,27 @@ export default class Websocket {
     handleNewGameEvent = async (e) => {
         const {cards:{hand}} = getStore();
         await batch(async () => {
-            const shouldFlashCard = e.stakeWithUser.length === 0 
-            && (sumObjectValues(e.score) + sumObjectChar(e.dehlaScore) > 0);
             
-            if(shouldFlashCard) {
-                this.dispatch(updateFlashCard(true));
-                setTimeout(() => {
-                    this.dispatch(updateOnNewGameEvent({...e, flashCard: false, hand}));
-        
-                }, 3000);
-            }
-            else {
+            const shouldFlashCard = (
+                e.stakeWithUser.length === 4 
+                && (sumObjectValues(e.score) + sumObjectChar(e.dehlaScore) > 0)
+            );
+
+            if(!shouldFlashCard) {
                 this.dispatch(updateOnNewGameEvent({...e, hand}));
+                return;
             }
+
+            this.dispatch(flashCard({nextChance:e.nextChance, stakeWithUser: e.stakeWithUser}));
+            setTimeout(() => {
+                const toUpdate = {...e, flashCard: false, hand, stakeWithUser: []};
+                this.dispatch(updateOnNewGameEvent(toUpdate));
+                if (e.roomStatus === Room.STATUS_INACTIVE) {
+                    this.dispatch(replace(Url.GameOver(window.getRoomCode())));
+                }
+    
+            }, 3000);
+
         });
     };
 

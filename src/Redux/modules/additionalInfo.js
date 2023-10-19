@@ -1,10 +1,17 @@
 import update from 'immutability-helper';
-import {FALSH_CARD, PLAY_CARD, UPDATE_LOGGED_IN_USER_ID, UPDATE_NEW_GAME_EVENT} from './../events';
+import {FALSH_CARD, PLAY_CARD, UPDATE_LOGGED_IN_USER_ID, UPDATE_NEW_GAME_EVENT, OPEN_TRUMP} from './../events';
 
 export function updateLoggedInUserId(userId) {
     return {
         type: UPDATE_LOGGED_IN_USER_ID,
         data: userId
+    };
+}
+
+export function openTrumpEvent(position) {
+    return {
+        type: OPEN_TRUMP,
+        trumpDecidedBy: position
     };
 }
 
@@ -15,10 +22,12 @@ export function updateOnNewGameEvent(event) {
     };
 }
 
-export function updateFlashCard(data) {
+export function flashCard(event) {
     return {
         type: FALSH_CARD,
-        flashCard: data,
+        flashCard: true,
+        nextChance: event.nextChance,
+        stakeWithUser: event.stakeWithUser
     };
 }
 
@@ -42,8 +51,15 @@ export default function additionalInfo(state = initialState, action) {
         case UPDATE_LOGGED_IN_USER_ID:
             return update(state, {loggedInUserId: {$set: action.data}});
 
+        case OPEN_TRUMP:
+            return update(state, {trumpDecidedBy: {$set: action.trumpDecidedBy}});
+
         case FALSH_CARD:
-            return update(state, {flashCard: {$set: action.flashCard}});
+            return update(state, 
+                {
+                    flashCard: {$set: true},
+                    nextChance: {$set: action.nextChance},
+                });
 
         case PLAY_CARD:
             return update(state, {nextChance: {$set: action.nextChance}});

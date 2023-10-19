@@ -23,8 +23,6 @@ const Login = (props) => {
     };
 
     const onLogin = async () => {
-        user.set('email', 'dp@dp.com');
-        user.set('password', 'password');
         setError(null);
         if (!user.isValidForLogin() || isLoading) {
             return;

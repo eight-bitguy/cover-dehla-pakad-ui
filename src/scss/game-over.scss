@@ -6,15 +6,17 @@
   align-items: center;
   justify-content: center;
   height: 90vh;
+  
 
   .game-over {
     justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
 
-  .text {
+  .text-large {
     font-family: $secondary-font;
     color: $primary-color;
     font-size: 50px;
@@ -26,8 +28,14 @@
   }
 
   .back-icon {
-    margin-top: 5vh;
     display: flex;
     justify-content: center;
+  }
+
+  .game-over-go-back {
+    display: flex;
+    .go-back-container {
+      margin: 5vh;
+    }
   }
 }

@@ -8,11 +8,11 @@ const GameOverPage = (props) => {
     return (
         <div className='game-over-container'>
             <div className='game-over'>
-                <span className='text'>That's all folks</span>
-                <div className='score-board-div'>
-                    <ScoreBoard roomCode={props.match.params.roomCode}/>
+                <span className='text-large'>That's all folks</span>
+                <ScoreBoard roomCode={props.match.params.roomCode}/>
+                <div className='game-over-go-back'>
+                    <GoBack url={Url.LandingPage}/>
                 </div>
-                <GoBack url={Url.LandingPage}/>
             </div>
         </div>
     );
