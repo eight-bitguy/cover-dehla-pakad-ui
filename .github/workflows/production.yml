@@ -24,6 +24,9 @@ jobs:
       - name: Installing dependencies..
         run: npm install
 
+      - name: Inject env variables in to the build..
+        run: echo "REACT_APP_PRODUCTION_WEBSOCKET_KEY=${{ secrets.PRODUCTION_WEBSOCKET_KEY }}">>.env
+
       - name: build
         run: CI=false npm run build:all
 
