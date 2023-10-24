@@ -1,0 +1,41 @@
+name: production deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-test-deploy:
+    name: Build, Test & Deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    env:
+      steps:
+      - name: Check-out repo..
+        uses: actions/checkout@v2
+
+      - name: Using node.js ${{ matrix.node-version }}..
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Installing dependencies..
+        run: npm install
+
+      - name: build
+        run: npm run build:all
+
+      - name: Injecting AWS creds..
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploying
+        run: aws s3 sync build/ s3://${{secrets.PRODUCTION_BUCKET_NAME}} --acl public-read
+
+      - name: Invalidate
+        run: aws cloudfront create-invalidation --distribution-id ${{secrets.PRODUCTION_DISTRIBUTION}} --paths "/*"
