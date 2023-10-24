@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "axios": "^0.21.2",
     "backbone": "^1.4.0",
     "connected-react-router": "^6.0.0",
