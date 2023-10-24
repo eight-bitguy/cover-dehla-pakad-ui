@@ -4,4 +4,6 @@ export const AppEvent = {
     addPrivateChannel: 'addPrivateChannel'
 };
 
-export default new EventEmitter();
+const emitter = new EventEmitter();
+
+export default emitter;
