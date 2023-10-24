@@ -27,6 +27,12 @@ jobs:
       - name: Inject env variables in to the build..
         run: echo "REACT_APP_PRODUCTION_WEBSOCKET_KEY=${{ secrets.PRODUCTION_WEBSOCKET_KEY }}">>.env
 
+      - name: Injecting env var
+        run: |
+         chmod +x ./public/scripts/test.sh
+         ./public/scripts/test.sh
+      shell: bash
+
       - name: build
         run: CI=false npm run build:all
 
