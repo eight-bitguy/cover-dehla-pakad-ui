@@ -1,3 +1,6 @@
+/*jslint vars: true, plusplus: true, -W003 */
+/*globals window, document, define, exports, module, require */
+
 var cardsScript = document.currentScript;
 
 (function (root, factory) {
