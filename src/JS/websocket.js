@@ -22,7 +22,7 @@ export default class Websocket {
             broadcaster: 'pusher',
             cluster: 'ap2',
             authEndpoint: `${window.apiUrl()}/api/broadcasting/auth`,
-            key: window.PRODUCTION_WEBSOCKET_KEY,
+            key: window._env_.REACT_APP_PRODUCTION_WEBSOCKET_KEY,
             activityTimeout: 60000,
             auth: {
                 headers: {
