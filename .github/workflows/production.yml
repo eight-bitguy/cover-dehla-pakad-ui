@@ -27,14 +27,14 @@ jobs:
       - name: Inject env variables in to the build..
         run: echo "REACT_APP_PRODUCTION_WEBSOCKET_KEY=${{ secrets.PRODUCTION_WEBSOCKET_KEY }}">>.env
 
+      - name: build
+        run: CI=false npm run build:all
+
       - name: Run script file
         run: |
          chmod +x ./Docker/env.sh
          ./Docker/env.sh
         shell: bash
-
-      - name: build
-        run: CI=false npm run build:all
 
       - name: Injecting AWS creds..
         uses: aws-actions/configure-aws-credentials@v1
