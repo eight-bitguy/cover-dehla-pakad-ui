@@ -1,9 +1,9 @@
 #!/bin/bash
 
-> /usr/share/nginx/html/env-config.js
+> ./build/env_config.js
 env >> .env
-echo "window._env_ = {" >> /usr/share/nginx/html/env_config.js
-
+echo "window._env_ = {" >> ./build/env_config.js
+g
 # Read each line in .env file
 # Each line represents key=value pairs
 while read -r line || [[ -n "$line" ]];
@@ -20,9 +20,9 @@ do
   [[ -z $value ]] && value=${varvalue}
 
   # Append configuration property to JS file
-  echo "  $varname: \"$value\"," >> /usr/share/nginx/html/env_config.js
+  echo "  $varname: \"$value\"," >> ./build/env_config.js
 done < .env
 
 rm .env
 
-echo "}" >> /usr/share/nginx/html/env_config.js
+echo "}" >> ./build/env_config.js
