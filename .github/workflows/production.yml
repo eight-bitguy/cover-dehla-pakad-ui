@@ -28,10 +28,10 @@ jobs:
         run: echo "REACT_APP_PRODUCTION_WEBSOCKET_KEY=${{ secrets.PRODUCTION_WEBSOCKET_KEY }}">>.env
 
       - name: Run script file
-      run: |
+        run: |
          chmod +x ./Docker/env.sh
          ./Docker/env.sh
-      shell: bash
+        shell: bash
 
       - name: build
         run: CI=false npm run build:all
