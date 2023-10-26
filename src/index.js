@@ -8,6 +8,7 @@ import Router from "./JS/router";
 import {addInterceptor} from "./Api/api";
 import reduxStore from "./JS/store";
 import Url from "./JS/url";
+import * as Sentry from "@sentry/react";
 
 export const store = reduxStore;
 
@@ -37,7 +38,6 @@ window.getRoomCode = () => {
 window.apiUrl = () => `https://dehla-pakad-api.eightbitguy.in`;
 
 addInterceptor();
-import * as Sentry from "@sentry/react";
 
 Sentry.init({
   dsn: window._env_.SENTRY_KEY,
