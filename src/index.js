@@ -34,7 +34,7 @@ window.getRoomCode = () => {
     return localStorage.getItem('room-code');
 };
 
-window.apiUrl = () => `http://localhost:8000`;
+window.apiUrl = () => 'http://dehla-pakad-api.eightbitguy.in/8000';
 
 addInterceptor();
 ReactDOM.render(
