@@ -40,7 +40,7 @@ window.apiUrl = () => `https://dehla-pakad-api.eightbitguy.in`;
 addInterceptor();
 
 Sentry.init({
-  dsn: window._env_.SENTRY_KEY,
+  dsn: window._env_ ? window._env_.SENTRY_KEY : 'null',
   integrations: [
     new Sentry.BrowserTracing({
       // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
