@@ -62,7 +62,7 @@ class GamePage extends Page {
     }
 
     render() {
-        const showOpenTrumpButton = canOpenTrump();
+        const showOpenTrumpButton = isMyChance() && canOpenTrump();
         return (
             <div className='game-page-container'>
                 <div className='scoreboard-outter-div'>
